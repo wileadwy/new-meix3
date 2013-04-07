@@ -1,0 +1,60 @@
+<layout name='layout_index' />
+<div class="stock_name">{$stockfind.showname}</div>
+<div class="stock clearfix">
+    <div class="content">
+        <div class="content_nav">
+            <ul class="clearfix">
+                <li class="content_nav_list3 first"><a href="__APP__/Stock/inside/id/{$stockfind.idstock}">观点</a></li>
+                <li class="content_nav_list3"><a class="this" <?php if($stockfind['shownumbertype']==1){ ?> href="__APP__/Stock/recstocks/id/{$stockfind.idstock}"<?php } ?> >荐股</a></li>
+                <li class="content_nav_list3 last"><a href="__APP__/Stock/groups/id/{$stockfind.idstock}">圈子</a></li>
+            </ul>
+        </div>
+        <div class="content_filter">
+            <div class="select js_select fr">
+                <a class="select_show" href="javascript:;">
+                	<?php if($type == 'success'){ ?>
+						只看成功
+	                <?php }elseif($type == 'lose'){ ?>
+						只看失败
+	                <?php }elseif($type == 'ondo'){ ?>
+						只看进行
+	                <?php }else{ ?>
+						查看全部
+	                <?php } ?>
+                <span class="icon_sanjiao1"></span></a>
+                <div class="select_list">
+                    <ul>
+                        <?php if($type == 'success'){ ?>
+							<li><a href="__APP__/Stock/recstocks/id/{$stock_id}">查看全部</a></li>
+							<li><a href="__APP__/Stock/recstocks/type/lose/id/{$stock_id}">只看失败</a></li>
+							<li><a href="__APP__/Stock/recstocks/type/ondo/id/{$stock_id}">只看进行</a></li>
+                    	<?php }elseif($type == 'lose'){ ?>
+                    		<li><a href="__APP__/Stock/recstocks/id/{$stock_id}">查看全部</a></li>
+                    		<li><a href="__APP__/Stock/recstocks/type/success/id/{$stock_id}">只看成功</a></li>
+							<li><a href="__APP__/Stock/recstocks/type/ondo/id/{$stock_id}">只看进行</a></li>
+                    	<?php }elseif($type == 'ondo'){ ?>
+                    		<li><a href="__APP__/Stock/recstocks/id/{$stock_id}">查看全部</a></li>
+                    		<li><a href="__APP__/Stock/recstocks/type/success/id/{$stock_id}">只看成功</a></li>
+							<li><a href="__APP__/Stock/recstocks/type/lose/id/{$stock_id}">只看失败</a></li>
+                    	<?php }else{ ?>
+							<li><a href="__APP__/Stock/recstocks/type/success/id/{$stock_id}">只看成功</a></li>
+	                        <li><a href="__APP__/Stock/recstocks/type/lose/id/{$stock_id}">只看失败</a></li>
+							<li><a href="__APP__/Stock/recstocks/type/ondo/id/{$stock_id}">只看进行</a></li>
+                    	<?php } ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="icon_line fr"></div>
+        </div>
+        <div class="content_list js_content_list">
+        	<?php $wdata['list'] = $list; $wdata['ifmode'] = 'rec_stocks'; ?>
+           	{:W('Rpcontent',$wdata)}
+        </div>
+        <?php $jsdata=array('url'=>'/Stock/stock_rec_stock_a','ifmode'=>'rec_stocks','table'=>'list_more','type'=>$type,'stock_id'=>$stock_id); ?>
+        {:W('More',$jsdata)}
+    </div>
+    <div class="sidebar">
+    	<?php $data['table'] = 'stock'; $data['id'] = $stock_id;?>
+    	{:W('Stock',$data)}
+    </div>
+</div>

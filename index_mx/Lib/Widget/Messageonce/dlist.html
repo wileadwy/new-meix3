@@ -1,0 +1,38 @@
+<div class="MC_list">
+    <volist name="list" id="vo" >
+    <div class="MC_list_content js_message{$vo.idmessage}">
+        <div class="MC_list_user clearfix">
+            <div class="fl">
+                <a name="ml{$vo.idmessage}"></a>
+                <a class="fl" href="{$vo.user_id}"><img src="{$vo.avatar}" width="40" /></a>
+            </div>
+            <div class="fl">
+                <span><a href="">{$vo.name}</a></span><br />
+                <?php $cetime = mktime()-$vo['mktime']; 
+                    if($cetime<432000){
+                        if($cetime<86400){
+                            echo '今天';
+                        }else{
+                            echo ((int)($cetime/86400)).'天前';
+                        }
+                    }else{ ?>
+                    {$vo.mktime|date="Y-m-d H:i",###}
+                <?php } ?>
+            </div>
+        </div>
+        <div class="MC_list_text">
+            {$vo.content}
+        </div>
+        <div class="MC_list_fn clearfix">
+            <table class="fr">
+                <tr align="right">
+                    <td width="60"><a class="icon_d js_opera_d <?php if($vo['toporpoor']=='top'){echo 'visited';} ?>" data-id="{$vo.idmessage}" href="javascript:;">({$vo.info_top})</a></td>
+                    <td width="60"><a class="icon_c js_opera_c <?php if($vo['toporpoor']=='poor'){echo 'visited';} ?>" data-id="{$vo.idmessage}" href="javascript:;">({$vo.info_poor})</a></td>
+                    <td width="60"><a class="icon_x js_reply js_reply_count{$vo.idmessage}" data-user-id="{$vo.user_id}" data-id="{$vo.idmessage}" href="javascript:;">({$vo.info_message_count})</a></td>
+                    <td width="40"><a class="icon_s js_opera_s <?php if($vo['favorite']==1){echo 'visited';} ?>" data-id="{$vo.idmessage}" href="javascript:;"></a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    </volist>
+</div>

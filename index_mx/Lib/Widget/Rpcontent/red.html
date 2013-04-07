@@ -1,0 +1,126 @@
+
+<?php foreach($list as $vo){  ?>
+                <div data-url="<?php
+                if(!empty($vo['RS'])){
+                    echo __APP__.'/Recstocks/inside/rid/'.$vo['idrec_stocks'];
+                }elseif(!empty($vo['PV'])){
+                    echo __APP__.'/Pointview/inside/pid/'.$vo['idpoint_view'];
+                }
+                  ?>" class="groups_discuess_list clearfix <?php if(!empty($_SESSION['MEIX']['iduser'])&&($vo['user_id']==$_SESSION['MEIX']['iduser'])){echo 'right';}else{echo 'left';} ?>">
+                    <div class="groups_discuess_list_img">
+                        <a href="<?php echo __APP__; ?>/User/index/id/<?php echo $vo['USER']['iduser']; ?>"><img src="<?php echo $vo['USER']['avatar']; ?>" width="54" height="54" /></a>
+                    </div>
+                    <div class="groups_discuess_list_content_wrap">
+                        <?php if(!empty($vo['GD'])){ ?>
+                        <div class="groups_discuess_list_box2_wrap">
+                            <div class="groups_discuess_list_box1_name"><?php echo $vo['USER']['name']; ?>
+                            <?php if(!empty($_SESSION['MEIX']['iduser'])&&($vo['user_id']==$_SESSION['MEIX']['iduser'])){ ?>
+                            <a class="js_group_change ml10 link0" data-discuess-id="<?php echo $vo['GD']['idgroups_list']; ?>" href="javascript:;">转</a>
+                            <?php } ?>
+                            </div>
+                            <div class="groups_discuess_list_box1_text"><?php echo $vo['content']; ?></div>
+                        </div>
+                        <?php }else{ ?>
+                        <div class="groups_discuess_list_box1_wrap">
+                            <div class="groups_discuess_list_box1">
+                                <div class="groups_discuess_list_box1_name"><?php echo $vo['user_name']; ?></div>
+                                <div class="clearfix">
+                                    <?php if(!empty($vo['RS'])){ ?>
+                	                <div class="mt5">
+                                        <div class="icon_content <?php if(($vo['status']==15)||($vo['status']==25)){ echo 'chenggong'; }elseif(($vo['status']==10)||($vo['status']==20)){ echo 'shibai'; }else{ echo 'dengdai'; } ?>"></div>
+                                        <?php
+                                        if($vo['status']==25||$vo['status']==15||$vo['status']==10||$vo['status']==20){
+                                            echo '以'.$vo['price_b'].'元';
+                                            if(($vo['status']==11)||($vo['status']==21)){ echo '等待'; }
+                                            //if(($vo['status']==15)||($vo['status']==25)){ echo '成功'; }
+                                            if($vo['moreorempty']=='sell'){ echo '卖出'; }else{ echo '买入'; }
+                                            if(($vo['status']==10)||($vo['status']==20)){ echo '失败'; }
+                                        }else{
+                                            echo '若  '.ceil(($vo['mktime_b']-$vo['mktime_a'])/86400).'天内 ';
+                                        } 
+                                        ?>
+                                        <a class="link0" href="<?php echo __APP__; ?>/Stock/inside/id/<?php echo $vo['stocks_id']; ?>"> <?php echo $vo['stocks_name']; ?>(<?php echo $vo['stocks_number']; ?>) </a>
+                                        <?php 
+                                            if($vo['status']==25||$vo['status']==15||$vo['status']==10||$vo['status']==20){
+                                                if($vo['cycle']['status']==25&&$vo['status']==25){ 
+                                                    echo '实际收益率:';
+                                                    foreach($vo['lslist'] as $vor3){
+                                                        if($vor3['status']==15){
+                                                            if($vor3['moreorempty']=='sell'){
+                                                                $price_b = $vor3['price_b']-$vo['price_b'];
+                                                            }else{
+                                                                $price_b = $vo['price_b']-$vor3['price_b'];
+                                                            }
+                                                        }
+                                                    }
+                                                    if($price_b){
+                                                        echo number_format(($price_b*100/$vo['price_b']),2).'%';
+                                                    }
+                                                 }elseif($vo['status']==15){ 
+                                                    if($vor3['moreorempty']=='sell'){
+                                                        echo '账面收益率:'.number_format((($vo['price_b']-$vo['Stocknow']['now'])*100/$vo['price_b']),2).'%';
+                                                    }else{
+                                                        echo '账面收益率:'.number_format((($vo['Stocknow']['now']-$vo['price_b'])*100/$vo['price_b']),2).'%';
+                                                    }
+                                                 } 
+                                            }else{
+                                                echo '股价 达'.$vo['price_b'].'元 建议';
+                                                if($vo['moreorempty']=='sell'){ echo '卖出'; }else{ echo '买入'; }
+                                            }
+                                        ?>
+                                        <div class="">
+                	                    	<?php if($vo['content']!=''){ ?>
+                		                    	<?php echo $vo['content']; ?>
+                		                    <?php } ?>
+                	                    </div>
+                                        <?php if(!empty($vo['lslist'])){ ?>
+                                        <div class="content_list_history">
+                                            <ul>
+                                                <?php foreach($vo['lslist'] as $lsvo){ ?>
+                                                <li>
+                                                    <div class="content_list_recinfo">
+                                                    <?php
+                                                    if($lsvo['status']==25||$lsvo['status']==15||$lsvo['status']==10||$lsvo['status']==20){
+                                                        echo '以'.$lsvo['price_b'].'元';
+                                                        if(($lsvo['status']==11)||($lsvo['status']==21)){ echo '等待'; }
+                                                        //if(($lsvo['status']==15)||($lsvo['status']==25)){ echo '成功'; }
+                                                        if($lsvo['moreorempty']=='sell'){ echo '卖出'; }else{ echo '买入'; }
+                                                        if(($lsvo['status']==10)||($lsvo['status']==20)){ echo '失败'; }
+                                                    }else{
+                                                        echo '若  '.ceil(($lsvo['mktime_b']-$lsvo['mktime_a'])/86400).'天内 ';
+                                                    } 
+                                                    ?>
+                                                    <a class="link0" href="<?php echo __APP__; ?>/Stock/inside/id/<?php echo $lsvo['stocks_id']; ?>"> <?php echo $lsvo['stocks_name']; ?>(<?php echo $lsvo['stocks_number']; ?>) </a> 
+                                                    
+                                                    </div>
+                                                    <div class="content_list_history_info"><?php W('Howlongtime',$lsvo); ?></div>
+                                                </li>
+                                                <?php } ?>
+                                            </ul>
+                                            <div class="icon_history"></div>
+                                        </div>
+                                        <?php } ?>
+                                        <div class="mt10 clearfix">
+                                            <div class="tag fl"><a href="<?php echo __APP__; ?>/Stock/inside/id/<?php echo $vo['stocks_id']; ?>"><?php echo $vo['stocks_name']; ?></a></div>
+                                        </div>
+                	                </div>
+                                    <?php }elseif(!empty($vo['PV'])){ ?>
+                                    <div class="groups_discuess_list_box1_text"><?php echo $vo['content']; ?></div>
+                                    <div class="clearfix mt10">
+                                        <div class="icon_content clearfix <?php if($vo['moreorempty']=='more'){ echo 'duo'; }else{ echo 'kong'; } ?>"></div>
+                                        <?php foreach($vo['TAG'] as $votag){ ?>
+                                            <div class="tag fl">
+                                                <a href="<?php echo __APP__; ?>/Stock/inside/id/<?php echo $votag['stock_id']; ?>"><?php echo $votag['stock_name']; ?></a>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                    <?php } ?>
+                	            </div>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <div class="groups_discuess_list_time clearfix"><?php W('Howlongtime',$vo); ?></div>
+                        <span class="icon_discuess"></span>
+                    </div>
+                </div>
+<?php } ?>

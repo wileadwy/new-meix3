@@ -1,0 +1,41 @@
+
+    <?php foreach($list as $key=>$vo){ ?>
+    <!--<div class="gropu_list_box" onclick="Common.group('__APP__/Groups/discuess/gid/<?php echo $vo['idgroups']; ?>','<?php echo $vo['name']; ?>','<?php echo $vo['idgroups']; ?>');">-->
+
+    	<div class="gropu_list_box" onclick="window.location.href = '<?php echo C(SITEURL); ?>/Groups/discuess/gid/<?php echo $vo['idgroups']; ?>';">
+	        <div class="gropu_list_top clearfix">
+	            <div class="gropu_list_img gropu_list_img<?php if(count($vo['User'])<=4){ echo '4';}else{ echo '9';} ?>">
+	                <ul class="clearfix">
+	               	    <?php foreach($vo['User'] as $key=>$val){ ?>
+	              		    <?php if($key<9){ ?>
+	                       		<li><img src="<?php echo $val['avatar']; ?>" /></li>
+	                        <?php } ?>
+	                    <?php } ?>
+	                </ul>
+	            </div>
+	            <div class="gropu_list_data">
+	                <div>
+	                    <a><?php echo $vo['name']; ?>(<?php echo count($vo['User']); ?>)</a>
+	                </div>
+	                <div>
+	                    <table>
+	                        <tr>
+	                            <td><?php echo $vo['accuracy']; ?>%<br /><span>准确率</span></td>
+	                            <td><?php echo $vo['point_view_count']; ?><br /><span>观点</span></td>
+	                            <td><?php echo $vo['rec_stocks_count']; ?><br /><span>荐股</span></td>
+	                            <td><?php echo $vo['attention_count']; ?><br /><span>关注</span></td>
+	                        </tr>
+	                    </table>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="gropu_list_info">
+	            简介：<?php echo $vo['name_info']; ?>
+	        </div>
+	        <div style="height: 25px; overflow: hidden;" class="clearfix mt5">
+	        	<?php foreach($vo['Stock'] as $sval){ ?>
+	       	    	<div class="tag fl mr5"><a href="<?php echo C(SITEURL); ?>/Stock/inside/id/<?php echo $sval['idstock']; ?>"><?php echo $sval['showname']; ?></a></div>
+	       	    <?php } ?>
+	        </div>
+		</div>
+    <?php } ?>

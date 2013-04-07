@@ -1,0 +1,30 @@
+<layout name='layout_index' />
+<div class="groups">
+    <div class="content">
+        <div class="content_filter">
+            <div class="search fl">
+                <input class="search_text js_search" type="text" value="" />
+                <div class="search_results"></div>
+            </div>
+        </div>
+        <div class="group_list js_group_list clearfix">
+        <?php $data['table'] = 'groups_index'; ?>
+        {:W('Groups',$data)}
+        </div>
+        <?php $more['table'] = 'groups_index'; $more['stock_id'] =  $_GET['sid'];  $more['id'] =  $_GET['id'];   ?>
+   		{:W('More',$more)}
+    </div>
+    <div class="sidebar">
+        <div class="sidebar_button">
+            <a class="js_groups" href="javascript:;">创建圈子</a>
+        </div>
+        <?php $data['table'] = 'groups_right'; ?>
+        {:W('Hotstocks',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+//创建圈子
+$.on($.getClass('js_groups'),'click',function(){
+    Common.layout('创建圈子','/Theme/index',{'theme':'group_add'});
+});
+</script>

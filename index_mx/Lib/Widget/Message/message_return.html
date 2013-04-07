@@ -1,0 +1,21 @@
+<div class="message_list clearfix">
+    <div class="message_list_avatar">
+        <a href=""><img src="<?php echo $list['avatar']; ?>" width="42" height="42" /></a>
+    </div>
+    <div class="message_list_content">
+        <div class="message_list_content_name">
+        	<?php if($list['is_reply'] == 1 ){ ?>
+            	<a href="/User/index/id/<?php echo $list['user_id']; ?>"><?php echo $list['name']; ?></a><span>回复</span><a href="/User/index/id/<?php echo $list['re_user_id']; ?>"><?php echo $list['re_name']; ?></a><span>:</span>
+            <?php }else{ ?>
+				<a href="/User/index/id/<?php echo $list['user_id']; ?>"><?php echo $list['name']; ?></a><span>:</span>
+            <?php } ?>
+        </div>
+        <div class="message_list_content_text"><?php echo $list['content']; ?></div>
+        <div class="message_list_content_info clearfix">
+            <span class="fl"><?php echo W('Howlongtime',$list,true); ?></span>
+            <div class="fr">
+                <a class="js_message_up" data-message-id="<?php echo $list['idmessage']; ?>" href="javascript:;">顶(<?php echo $list['info_top']; ?>)</a><span>|</span><a class="js_message_down" data-message-id="<?php echo $list['idmessage']; ?>" href="javascript:;">踩(<?php echo $list['info_poor']; ?>)</a><span>|</span><a class="js_reply_open" data-message-id="<?php echo $list['idmessage']; ?>" data-user-id="<?php echo $list['user_id']; ?>" href="javascript:;">回复</a>
+            </div>
+        </div>
+    </div>
+</div>

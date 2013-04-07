@@ -1,0 +1,51 @@
+<div class="discuess_change">
+    <div class="search_tag">
+        <div class="tag_list clearfix pr">
+            <ul class="search_tag_show js_search_tag_show"></ul>
+            <div class="search_tag_text">
+                <input type="text" name="code" class="js_default_value js_search_tag" data-default-value="增加标签" value="增加标签" />
+                <div class="search_tag_list tag_list">
+                    <ul class="clearfix js_tag_list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="viewpoint_type" style="margin: 10px 0 0 0;">
+        <input type="radio" class="js_viewpoint_moreorempty" checked="" value="more" name="moreorempty" /><span>看多</span><input class="js_viewpoint_moreorempty" value="empty" type="radio" name="moreorempty" /><span>看空</span>
+    </div>
+</div>
+<script type="text/javascript">
+//标签搜索
+Common.searchTag({'levelin':'','limitnum':'','pagenum':''});
+//控制文本框默认值
+Common.inputDefault($.getClass('js_default_value'),'data-default-value','focus');
+//提交方法
+$.on($.getClass('js_mask_submit'),'click',function(){
+    var json = {};
+    json['stocks'] = new Array();
+    json['listid'] = '<?php echo $datapost['idgroups_list']; ?>';
+    //获取标签ID
+    for(var i = 0 ; i < $.getClass('js_search_tag_select').length ; i ++ ){
+        json['stocks'].push($.attr($.getClass('js_search_tag_select')[i],'data-tag-id'));
+    };
+    //获取多空
+    for(var i = 0 ; i < $.getClass('js_viewpoint_moreorempty').length ; i ++ ){
+        if($.getClass('js_viewpoint_moreorempty')[i].checked){
+            json['moreorempty'] = $.getClass('js_viewpoint_moreorempty')[i].value;
+        }
+    };
+    if(json['stocks']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Pointview/discuess_pv_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    window.location.reload();
+                }
+            }
+        });
+    }else if(json['stocks']!==''){
+        alert('标签不能为空!');
+    }
+});
+</script>

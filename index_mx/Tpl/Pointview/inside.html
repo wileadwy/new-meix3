@@ -1,0 +1,63 @@
+<layout name='layout_index' />
+<div class="viewpoint_inside clearfix">
+    <div class="content">
+        <?php $wdata['list'] = $list; $wdata['ifmode'] = 'point_view'; ?>
+       	{:W('Rpcontent',$wdata)}
+    </div>
+    <div class="sidebar">
+        <div class="sidebar_box">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">你可能感兴趣的人</span>
+                <a class="js_user_change fr" href="javascript:;">换一换</a>
+            </div>
+            <div class="sidebar_box_content sidebar_user_list">
+           	    <volist name="user_right" id="vo">
+                <div class="sidebar_user_list_box clearfix">
+                    <div class="sidebar_user_list_img">
+                        <a href="__APP__/User/index/id/{$vo.iduser}"><img src="{$vo.avatar}" width="54" height="54" /></a>
+                    </div>
+                    <div class="sidebar_user_list_info">
+                        <div class="sidebar_user_list_info_title"><a href="__APP__/User/index/id/{$vo.iduser}">{$vo.name}</a></div>
+                        <div class="sidebar_user_list_info_other">{$vo.rate}准确率<span>|</span>{$vo.attention}人关注</div>
+                    </div>
+                </div>
+				</volist>
+            </div>
+        </div>
+        <div class="sidebar_box mt10">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">你可能感兴趣的圈子</span>
+                <a class="js_group_change fr" href="javascript:;">换一换</a>
+            </div>
+            <div class="sidebar_box_content sidebar_group_list js_change_group_list">
+            	<volist name="groups_right" id="vo">
+	                <div class="sidebar_group_list_box clearfix">
+	                    <div class="sidebar_group_list_img img<?php if(count($vo['User'])<=4){echo '4';}else{echo '9';} ?>">
+	                        <a href="__APP__/Groups/discuess/gid/{$vo.idgroups}">
+	                            <ul class="clearfix">
+	                            	<volist name="vo.User" id="tagvo">
+	                            		<?php if($i<=9){ ?>
+	                               	 		<li><img src="{$tagvo.avatar}" width="23" height="23" /></li>
+	                               	 	<?php } ?>
+	                               	</volist>
+	                            </ul>
+	                        </a>
+	                    </div>
+	                    <div class="sidebar_group_list_info">
+	                        <div class="sidebar_group_list_info_title"><a href="__APP__/Groups/discuess/gid/{$vo.idgroups}">{$vo.name}</a></div>
+	                        <div class="sidebar_group_list_info_other">{$vo.join}人参与</div>
+	                        <div class="sidebar_group_list_info_other">{$vo.rate}准确率<span>|</span>{$vo.attention}人关注</div>
+	                    </div>
+	                </div>
+                </volist>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+Common.change.user({'type':'home','num':'3'}); //换感兴趣的人
+Common.change.group({'type':'home','num':'3'}); //换感兴趣的圈子
+window.onload = function () {
+    $.getClass('js_viewpoint_message')[0].click();
+}
+</script>

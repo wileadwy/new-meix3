@@ -1,0 +1,25 @@
+<div class="MR_list js_reply<?php echo $message_id; ?>">
+    <div class="js_reply_list<?php echo $message_id; ?>">
+        <?php foreach($list as $vo){ ?>
+        <div class="MR_list_content">
+            <a href="<?php echo $vo['user_id']; ?>"><?php echo $vo['name']; ?></a> : <?php echo $vo['content']; ?>
+            <span>
+            <?php $cetime = mktime()-$vo['mktime']; 
+                if($cetime<432000){
+                    if($cetime<86400){
+                        echo '今天';
+                    }else{
+                        echo ((int)($cetime/86400)).'天前';
+                    }
+                }else{ 
+                    echo date("Y-m-d H:i",$vo['mktime']); 
+                } ?>
+            </span>
+        </div>
+        <?php } ?>
+    </div>
+    <div class="MR_list_text clearfix">
+        <input type="text" name="content" class="js_reply_value<?php echo $message_id; ?>" value="" />
+        <a class="js_reply_submit" data-message-id="<?php echo $message_id; ?>" data-user-id="<?php echo $re_id; ?>" href="javascript:;">回应</a>
+    </div>
+</div>

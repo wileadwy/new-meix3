@@ -1,0 +1,45 @@
+<layout name='layout_index' />
+<div class="user_notice_wrap">
+    <div class="user_notice_title">我的私信</div>
+    <div class="user_notice clearfix">
+        <div class="content">
+        <volist name="list" id="vo">
+            <div class="letter_list clearfix">
+                <div class="letter_list_avatat">
+                    <a href="__APP__/User/letter/uid/{$vo.user.iduser}"><img src="{$vo.user.avatar}" width="54" height="54" /></a>
+                </div>
+                <div class="letter_list_content">
+                    <div class="letter_list_text">
+                        <a href="__APP__/User/letter/uid/{$vo.letter.fuser_id}">{$vo.letter.fuser_name}: </a>{$vo.letter.content}
+                    </div>
+                    <div class="letter_list_info clearfix">
+                        <span class="fl">{:W('Howlongtime',$vo.letter)}</span>
+                        <div class="fr">
+                            <a class="link0" href="__APP__/User/letter/uid/{$vo.user.iduser}">共{$vo.count}条</a><span>|</span><a class="link0 js_letter_add" data-user-id="{$vo.user.iduser}" data-user-name="{{$vo.user.name}" href="javascript:;">回复</a><span>|</span><a class="link0 js_letter_del" data-letter-id="{$vo.letter.idletter}" href="javascript:;">删除</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </volist>
+        </div>
+        <div class="sidebar">
+            <div class="sidebar_nav">
+                <ul>
+                    <li class="first"><a class="this" href="__APP__/User/letter">私信</a></li>
+                    <li><a href="__APP__/User/notice">提醒</a></li>
+                    <li class="last"><a href="">帐号设置</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$.on($.getClass('js_letter_del'),'click',function(){
+    Common.confirm({
+        content:'你确定删除与此人的私信吗?',
+        enter_callback:function(){
+            Common.maskClose();
+        }
+    });
+});
+</script>

@@ -1,0 +1,23 @@
+<div class="letter_add">
+    <div>发私信给：<?php echo $datapost['name']; ?></div>
+    <textarea class="form_textarea js_letter_value mt10" name="content"></textarea>
+</div>
+<script type="text/javascript">
+$.on($.getClass('js_mask_submit'),'click',function(){
+    var json = $.getValue('js_letter_value');
+    json['user_id'] = '<?php echo $datapost['id']; ?>';
+    if(json['content']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/User/message_letter_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    window.location.reload();
+                }
+            }
+        });
+    }else{
+        alert('私信内容不能为空!');
+    }
+});
+</script>

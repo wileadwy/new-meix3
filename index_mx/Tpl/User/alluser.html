@@ -1,0 +1,36 @@
+<layout name='layout_index' />
+<style type="text/css">
+table { width: 100%;}
+    table td { border: 1px solid #dfdfdf; color: #666; text-align: center; padding: 5px;}
+    table td img { display: inline;}
+    table td a { color: #666;}
+    table td a:hover { text-decoration: underline;}
+</style>
+<div style="background: #fff; border: 1px solid #d0cfcb; border-radius: 5px; padding: 10px;">
+	<table>
+		<thead>
+            <tr>
+    			<td>序号</td>
+    			<td>ID</td>
+    			<td>头像</td>
+    			<td>用户名</td>
+    			<td>简介</td>
+    			<td>邮箱</td>
+    			<td>注册时间</td>
+    		</tr>
+        </thead>
+		<tbody>
+            <volist name="list" id="vo">
+    			<tr>
+    				<td>{$i}</td>
+    				<td>{$vo.iduser}</td>
+    				<td><a href="__APP__/User/index/id/{$vo.iduser}"><img src="{$vo.avatar}" width="40px" height="40px" /></a></td>
+    				<td><a href="__APP__/User/index/id/{$vo.iduser}">{$vo.name}</a></td>
+    				<td width="500">{$vo.information}</td>
+    				<td>{$vo.username}</td>
+    				<td><?php echo date('Y-m-d:h:i',$vo['mktime']); ?></td>
+    			</tr>
+    		</volist>
+        </tbody>
+	</table>
+</div>

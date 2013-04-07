@@ -1,0 +1,98 @@
+<div class="DK_list_d">
+    <ul>
+        <volist name="more" id="morevo">
+        <li>
+            <div class="DK_list_user clearfix">
+                <img class="fl" src="{$morevo.avatar}" width="40" height="40" />
+                <span class="icon_kd fl"></span>
+                <div class="DK_list_user_name">{$morevo.name}<br />
+                <?php $cetime = mktime()-$morevo['mktime'];
+                    if($cetime<432000){
+                        if($cetime<86400){
+                            echo '今天';
+                        }else{
+                            echo ((int)($cetime/86400)).'天前';
+                        }
+                    }else{ ?>
+                    {$emptyvo.mktime|date="Y-m-d H:i",###}
+                <?php } ?>
+                </div>
+            </div>
+            <div class="DK_list_suject">
+                <span>结论：</span>{$morevo.content_t}
+            </div>
+            <div class="DK_list_info">
+                <table width="100%">
+                    <tr>
+                        <td align="left">影响周期：{$morevo.info_cycle}</td>
+                        <td align="center">目标仓位：{$morevo.info_positions}</td>
+                        <td align="right">目标价格：{$morevo.info_price}元</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="DK_list_content">
+                <span>因为：</span>{$morevo.reason_t}<a href="__APP__/Moreorempty/viewpoint/id/{$morevo.idmoreorempty}">展开</a>
+            </div>
+            <div class="DK_list_fn">
+                <table width="100%">
+                    <tr align="center">
+                        <td><a class="icon_d js_opera_d <?php if($morevo['toporpoor']=='top'){echo 'visited';} ?>" data-id="{$morevo.idmoreorempty}" href="javascript:;">({$morevo.info_top})</a></td>
+                        <td><a class="icon_c js_opera_c <?php if($morevo['toporpoor']=='poor'){echo 'visited';} ?>" data-id="{$morevo.idmoreorempty}" href="javascript:;">({$morevo.info_poor})</a></td>
+                        <td><a class="icon_x" href="__APP__/Moreorempty/viewpoint/id/{$morevo.idmoreorempty}">({$morevo.info_message_count})</a></td>
+                        <td><a class="icon_s js_opera_s <?php if($morevo['favorite']==1){echo 'visited';} ?>" data-id="{$morevo.idmoreorempty}" href="javascript:;"></a></td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+        </volist>
+    </ul>
+</div>
+<div class="DK_list_k">
+    <ul>
+        <volist name="empty" id="emptyvo">
+        <li>
+            <div class="DK_list_user clearfix">
+                <img class="fl" src="{$emptyvo.avatar}" width="40" height="40" />
+                <span class="icon_kk fl"></span>
+                <div class="DK_list_user_name">{$emptyvo.name}<br />
+                <?php $cetime = mktime()-$emptyvo['mktime'];
+                    if($cetime<432000){
+                        if($cetime<86400){
+                            echo '今天';
+                        }else{
+                            echo ((int)($cetime/86400)).'天前';
+                        }
+                    }else{ ?>
+                    {$emptyvo.mktime|date="Y-m-d H:i",###}
+                <?php } ?>
+                </div>
+            </div>
+            <div class="DK_list_suject">
+                <span>结论：</span>{$emptyvo.content_t}
+            </div>
+            <div class="DK_list_info">
+                <table width="100%">
+                    <tr>
+                        <td align="left">影响周期：{$emptyvo.info_cycle}</td>
+                        <td align="center">目标仓位：{$emptyvo.info_positions}</td>
+                        <td align="right">目标价格：{$emptyvo.info_price}元</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="DK_list_content">
+                <span>因为：</span>{$emptyvo.reason_t}<a href="__APP__/Stockmarket/viewpoint/id/{$emptyvo.idmoreorempty}">展开</a>
+            </div>
+            <div class="DK_list_fn">
+                <table width="100%">
+                    <tr align="center">
+                        <td><a class="icon_d js_opera_d <?php if($emptyvo['toporpoor']=='top'){echo 'visited';} ?>" data-id="{$emptyvo.idmoreorempty}" href="javascript:;">({$emptyvo.info_top})</a></td>
+                        <td><a class="icon_c js_opera_c <?php if($emptyvo['toporpoor']=='poor'){echo 'visited';} ?>" data-id="{$emptyvo.idmoreorempty}" href="javascript:;">({$emptyvo.info_poor})</a></td>
+                        <td><a class="icon_x" href="__APP__/Moreorempty/viewpoint/id/{$emptyvo.idmoreorempty}">({$emptyvo.info_message_count})</a></td>
+                        <td><a class="icon_s js_opera_s <?php if($emptyvo['favorite']==1){echo 'visited';} ?>" data-id="{$emptyvo.idmoreorempty}" href="javascript:;"></a></td>
+                    </tr>
+                </table>
+            </div>
+        </li>
+        </volist>
+    </ul>
+</div>

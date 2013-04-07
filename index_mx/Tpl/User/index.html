@@ -1,0 +1,76 @@
+<layout name='layout_index' />
+<div class="user">
+    <div class="user_content">
+        <?php $data['id'] = $_GET['id'];$data['part'] = 'head'; ?>
+		{:W('User',$data)}
+        <div class="content mt10">
+            <div class="content_nav">
+                <ul class="clearfix">
+                    <li class="content_nav_list4 first"><a class="this" href="__APP__/User/index/id/{$iduser}">观点</a></li>
+                    <li class="content_nav_list4"><a href="__APP__/User/recstock/id/{$iduser}">荐股</a></li>
+                    <li class="content_nav_list4"><a href="__APP__/User/groups/id/{$iduser}">圈子</a></li>
+                    <li class="content_nav_list4 last"><a href="__APP__/User/favorite/id/{$iduser}">收藏</a></li>
+                </ul>
+            </div>
+            <div class="content_filter">
+                <div class="search fl">
+                <input class="search_text js_search" type="text" value="" />
+                <div class="search_results"></div>
+            </div>
+            <div class="select js_select fr">
+                <a class="select_show" href="javascript:;">
+	                <?php if($type == 'more'){ ?>
+						只看多
+	                <?php }elseif($type == 'empty'){ ?>
+						只看空
+	                <?php }else{ ?>
+						查看全部
+	                <?php } ?>
+                    <span class="icon_sanjiao1"></span>
+                </a>
+                <div class="select_list">
+                    <ul>
+                    	<?php if($type == 'more'){ ?>
+							<li><a href="__APP__/User/index/id/{$iduser}<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">全部</a></li>
+							<li><a href="__APP__/User/index/id/{$iduser}/type/empty<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看空</a></li>
+                    	<?php }elseif($type == 'empty'){ ?>
+                    		<li><a href="__APP__/User/index/id/{$iduser}<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">全部</a></li>
+                    		<li><a href="__APP__/User/index/id/{$iduser}/type/more<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看多</a></li>
+                    	<?php }else{ ?>
+							<li><a href="__APP__/User/index/id/{$iduser}/type/more<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看多</a></li>
+	                        <li><a href="__APP__/User/index/id/{$iduser}/type/empty<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看空</a></li>
+                    	<?php } ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="content_list js_content_list">
+        	<?php $wdata['list'] = $list; $wdata['ifmode'] = 'user_point_view'; ?>
+           	{:W('Rpcontent',$wdata)}
+        </div>
+        	<?php $jsdata=array('url'=>'/User/my_point_view_a','ifmode'=>'point_view','table'=>'list_more','type'=>$type,'stock_id'=>$stock_id,'user_id'=>$iduser); ?>
+	        {:W('More',$jsdata)}
+        </div>
+    </div>
+    <div class="sidebar">
+    	<?php $data['id'] = $iduser; $data['part'] = 'right';  ?>
+		{:W('User',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+$.on($.getClass('js_subscribe'),'click',function(){
+    $.ajax({
+        url : Config['defaultUrl'] + '/User/subscribe_user_a',
+        data : {'user_id':$.attr(this,'data-user-id')},
+        context : this,
+        success : function (data) {
+            if(data['status']==1){
+                $.html(this.context,data['info']);
+            }else{
+                Common.alert({content:data['info']});
+            }
+        }
+    });
+});
+Common.tagSearch({url:'__APP__/User/index/id/<?php echo $iduser; ?><?php if(!empty($type)){ echo "/type/".$type; } ?>'}); //搜索
+</script>

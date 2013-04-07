@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MeiX</title>
+<link rel="stylesheet" href="__ANNEX__/css/base.css" />
+<link rel="stylesheet" href="__ANNEX__/css/login.css" />
+<script type="text/javascript" src="__ANNEX__/js/base.js"></script>
+<script type="text/javascript">
+var Config_url = '<?php echo C('SITEURL'); ?>';
+</script>
+</head>
+<body class="login_body">
+<div class="login_wrap">
+    <table width="500">
+        <tr>
+            <td>
+                <div class="login_logo"></div>
+            </td>
+        </tr>
+        <tr>
+            <td height="50"></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="clearfix">
+                    <!--
+                    <a class="icon_sina" href="{$sinaurl}"></a>
+                    <a class="icon_qq" href="__APP__/Login/qqlogin"></a>
+                    -->
+                    <?php if(!empty($_GET['mei'])&&$_GET['mei']=='x'){ ?>
+                    <a class="icon_sina" href="{$sinaurl}"></a>
+                    <a class="icon_qq" href="__APP__/Login/qqlogin"></a>
+                    <?php }else{ ?>
+                    <a class="icon_sina" onclick="alert('暂未开放!');" href="javascript:;"></a>
+                    <a class="icon_qq" onclick="alert('暂未开放!');" href="javascript:;"></a>
+                    <?php } ?>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td height="75">
+                <div class="icon_fenge"></div>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <input class="login_username js_login_value" type="text" value="" name="username" />
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <input class="login_password js_login_value" type="password" value="" name="password" />
+            </td>
+        </tr>
+        <tr>
+            <td align="center" class="js_wrong">
+                
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <a class="button js_login_submit" href="javascript:;"></a>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+var common = {
+    inputDefault : function ( obj , cl ) {
+        if(obj.value!=''){
+            $.addClass(obj,cl);
+        }
+        $.on(obj,'focus',function(){
+            $.html($.getClass('js_wrong')[0],' ');
+            if(!$.hasClass(this,cl)){
+                $.addClass(this,cl);
+            }
+        });
+        $.on(obj,'blur',function(){
+            if($.hasClass(this,cl)&&this.value==''){
+                $.removeClass(this,cl);
+            }
+        });
+    },
+    wrong : function ( text ) {
+        $.html($.getClass('js_wrong')[0],'<div class="login_wrong">'+text+'</div>')
+    },
+    submit : function () {
+        var json = $.getValue('js_login_value');
+        if($.isEmail(json['username'])&&json['password']!=''){
+            $.ajax({
+                type : 'POST',
+                url : Config_url + '/Login/login_a',
+                dataType : 'json',
+                data : json,
+                success : function (data) {
+                    if(data['status']==1){
+                        window.location.reload();
+                    }else{
+                        common.wrong(data['info']);
+                    }
+                }
+            })
+        }else if(!$.isEmail(json['username'])){
+            common.wrong('邮箱格式不正确!');
+        }else if(json['password']==''){
+            common.wrong('密码不能为空!');
+        }
+    }
+};
+$.on($.getClass('js_login_submit'),'click',common.submit);
+$.isEnter($.getClass('login_username')[0],function(){
+    $.getClass('login_password')[0].focus();
+});
+$.isEnter($.getClass('login_password')[0],function(){
+    common.submit();
+});
+common.inputDefault($.getClass('login_username')[0],'focus');
+common.inputDefault($.getClass('login_password')[0],'focus');
+</script>

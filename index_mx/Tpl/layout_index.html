@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MeiX</title>
+<link rel="stylesheet" href="__ANNEX__/css/base.css" />
+<link rel="stylesheet" href="__ANNEX__/css/common.css" />
+<link rel="stylesheet" href="__ANNEX__/css/global.css" />
+<script type="text/javascript" src="__ANNEX__/js/base.js"></script>
+<script type="text/javascript">
+var Config = new Object();
+Config['defaultUrl'] = '<?php echo C('SITEURL'); ?>';
+</script>
+<script type="text/javascript" src="__ANNEX__/js/common.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <div class="headerWrap">
+        <div class="header clearfix">
+            <div class="header_logo">
+                <a title="美市" href="__APP__"></a>
+            </div>
+            <div class="header_nav">
+                <ul class="clearfix">
+                    <li><a href="__APP__" class="<?php if(MODULE_NAME=='Index'){ echo 'this'; } ?>" >首页</a></li>
+                    <li><a href="__APP__/Groups" class="<?php if(MODULE_NAME=='Groups'){ echo 'this'; } ?> " >圈子</a></li>
+                    <li><a href="__APP__/Recstocks" class="<?php if(MODULE_NAME=='Recstocks'){ echo 'this'; } ?> " >荐股</a></li>
+                    <li><a href="__APP__/Pointview" class="<?php if(MODULE_NAME=='Pointview'){ echo 'this'; } ?> " >观点</a></li>
+                </ul>
+            </div>
+            <div class="header_user">
+                <div class="header_user_name clearfix">
+                    <a href="__APP__/User/index/id/<?php echo $_SESSION['MEIX']['iduser']; ?>">
+                        <img src="<?php echo $_SESSION['MEIX']['avatar']; ?>" width="30" height="30" />
+                        <span><?php echo $_SESSION['MEIX']['name']; ?></span>
+                        <div class="header_user_name_num"></div>
+                    </a>
+                </div>
+                <div class="header_user_list">
+                    <ul class="js_header_user_list">
+                        <li><a href="__APP__/User/index/id/<?php echo $_SESSION['MEIX']['iduser']; ?>">个人主页</a></li>
+                        <li><a class="js_notice_num" href="__APP__/User/notice">提示</a></li>
+                        <li><a class="js_letter_num" href="__APP__/User/letter">私信</a></li>
+                        <!--<li><a href="">设置</a></li>-->
+                        <li><a href="__APP__/Login/sign">退出</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mainWrap">
+        <div class="main clearfix">{__CONTENT__}</div>
+    </div>
+    <div class="footerWrap">
+        <div class="footer clearfix">
+            <ul class="footer_nav">
+                <li><a href="">关于美市</a></li>
+                <li><span>|</span></li>
+                <li><a href="">招聘</a><span style="display: none;" ><script src="http://s17.cnzz.com/stat.php?id=5153495&web_id=5153495&show=pic1" language="JavaScript"></script></span></li>
+                <li><span>|</span></li>
+                <li><a href="">联系我们</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="__ANNEX__/js/global.js"></script>
+</body>
+</html>

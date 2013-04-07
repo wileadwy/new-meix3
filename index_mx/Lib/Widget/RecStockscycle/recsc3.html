@@ -1,0 +1,100 @@
+<div class="recommendedStock_add">
+    <div class="ml20 mr20 pb10">
+        <div class="link0 p5 f18"><?php echo $find['stocks_name']; ?></div>
+        <table style="width: 460px;">
+            <tr>
+                <td>当前价格:</td>
+                <td><?php echo $find['now']; ?></td>
+                <td><?php if($find['first']=='sell'){ echo '买入'; }else{ echo '卖出'; } ?>价格</td>
+                <td><?php echo $find['price_b']; ?></td>
+                <td>账面收益率</td>
+                <td><?php echo $find['zmsyl']; ?>%</td>
+            </tr>
+        </table>
+    </div>
+    <div class="pl20 pr20 pt10" style="border-top: 1px solid #D3D2CE;">
+        <table>
+            <tr>
+                <td><input type="radio" class="js_rec_dangqianjia" checked="" name="price" /> 当前价格</td>
+                <td><input type="radio" class="js_rec_xiandingjia" name="price" /> 限定价 <input disabled="" type="text" class="js_recommendedStock_price js_rec_disabled js_recommendedStock_value form_input" name="price_b" value="" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <span class="pl15 pr5">有效期</span>
+                    <select name="mktime_b" disabled="" class="form_select js_rec_disabled js_recommendedStock_value">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                    </select> 天
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="recommendedStock_content">
+        <textarea class="form_textarea js_recommendedStock_value js_default_value" data-default-value="输入您推荐的理由" name="content">输入您推荐的理由</textarea>
+    </div>
+    <div class="viewpoint_group">
+        <div>同时发布到以下圈子</div>
+        <ul class="clearfix">
+            <?php foreach($groupslist as $vo){ ?>
+            <li><input type="checkbox" checked="" class="js_recommendedStock_groups" value="<?php echo $vo['idgroups']; ?>" /><span><?php echo $vo['name']; ?></span></li>
+            <?php } ?>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+var price = false;
+//控制文本框默认值
+Common.inputDefault($.getClass('js_default_value'),'data-default-value','focus');
+//提交方法
+$.on($.getClass('js_mask_submit'),'click',function(){
+    var json = $.getValue('js_recommendedStock_value');
+    json['cycle'] = '<?php echo $find['cycle']; ?>'
+    json['first'] = '<?php echo $find['first']; ?>'
+    json['price_a'] = '<?php echo $find['now']; ?>';
+    json['groups'] = new Array();
+    for(var i = 0 ; i < $.getClass('js_recommendedStock_groups').length ; i ++ ){
+        if($.getClass('js_recommendedStock_groups')[i].checked){
+            json['groups'].push($.getClass('js_recommendedStock_groups')[i].value);
+        }
+    };
+    if(json['content']=='输入您推荐的理由'){
+        json['content'] = '';
+    };
+    if(!price){
+        json['price_b'] = '<?php echo $find['now']; ?>';
+        json['mktime_b'] = '0';
+    };
+    if(json['price_b']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Userc/rec_3_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    window.location.reload();
+                }
+            }
+        });
+    }else{
+        alert('限定价格不能为空!');
+    }
+});
+//切换价格类型
+$.on($.getClass('js_rec_dangqianjia'),'change',function(){
+    price = false;
+    $.each($.getClass('js_rec_disabled'),function(target){
+        target.disabled = true;
+    });
+});
+$.on($.getClass('js_rec_xiandingjia'),'change',function(){
+    price = true;
+    $.each($.getClass('js_rec_disabled'),function(target){
+        target.disabled = false;
+    });
+});
+</script>

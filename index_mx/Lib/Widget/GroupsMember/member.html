@@ -1,0 +1,58 @@
+<div class="mask_group_user">
+    <div class="gruop_user_search clearfix">
+        <input type="text" data-default-value="请输入要查找的人名" value="请输入要查找的人名" class="form_input js_search_user js_default_value" />
+        <div class="gruop_user_search_list">
+
+        </div>
+    </div>
+    <div class="gruop_user_list"></div>
+</div>
+<script type="text/javascript">
+Common.inputDefault($.getClass('js_default_value'),'data-default-value','focus');
+//搜索人
+$.on($.getClass('js_search_user'),'keyup',function(){
+    if(this.value!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Tool/tool_search_user_a',
+            data : {'name':this.value,'gid':"<?php echo $list['gid']; ?>"},
+            success : function (data) {
+                if(data['status']==1){
+                    var html = '';
+                    for( var i = 0 ; i < data['data'].length ; i ++ ){
+                        html += '<li><a class="js_gruop_search_select clearfix" data-user-id="'+data['data'][i]['iduser']+'" data-user-avarar="'+data['data'][i]['avatar']+'" href="javascript:;"><img src="'+data['data'][i]['avatar']+'" /><span>'+data['data'][i]['name']+'</span></a></li>'
+                    }
+                    $.html($.getClass('gruop_user_search_list')[0],'<ul>'+html+'</ul>');
+                    $.addClass($.getClass('gruop_user_search')[0],'show');
+                    $.on($.getClass('js_gruop_search_select'),'click',function(){
+                        $.html($.getClass('gruop_user_list')[0],'<ul class="clearfix"><li data-user-id="'+$.attr(this,'data-user-id')+'" class="js_gruop_user_selected"><img src="'+$.attr(this,'data-user-avarar')+'" /></li></ul>')
+                        $.html($.getClass('gruop_user_search_list')[0],' ');
+                        $.removeClass($.getClass('gruop_user_search')[0],'show');
+                    });
+                }
+            }
+        });
+    }else{
+        $.html($.getClass('gruop_user_search_list')[0],' ');
+        $.removeClass($.getClass('gruop_user_search')[0],'show');
+    }
+});
+//提交邀请
+$.on($.getClass('js_mask_submit'),'click',function(){
+    if($.getClass('js_gruop_user_selected').length>0){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Groups/invite_groups_a',
+            data : {'uid':$.attr($.getClass('js_gruop_user_selected')[0],'data-user-id'),'gid':"<?php echo $list['gid']; ?>"},
+            success : function (data) {
+                if(data['status']==1){
+                    alert('邀请已发出!');
+                    window.location.reload();
+                }else{
+                    alert(data['info']);
+                }
+            }
+        });
+    }else{
+        alert('邀请人不能为空!');
+    }
+})
+</script>

@@ -1,0 +1,101 @@
+<layout name='layout_index' />
+<div class="user_notice_wrap">
+    <div class="user_notice_title">全部提醒</div>
+    <div class="user_notice clearfix">
+        <div class="content">
+            <div class="list3">
+                <volist name="list" id="vo">
+                <div class="list3_box <?php if($vo['ed']==1){ echo 'fb js_notice_unread'; }; ?>" data-notice-id="{$vo.idnotice}">
+                    <div class="list3_box_info">
+                        <a href="">{$vo.name}</a>{$vo.showtype}{$vo.content_t}
+                    </div>
+                    <?php if(!empty($vo['Groups'])){ ?>
+                    <div class="list3_box_content">
+                        <div class="sidebar_group_list_box clearfix">
+                            <div class="sidebar_group_list_img img<?php if(count($vo['Groups']['User'])<=4){ echo '4';}else{ echo '9';} ?>">
+                                <a href="__APP__/Groups/discuess/gid/{$vo.Groups.idgroups}">
+                                    <ul class="clearfix">
+                                    <?php foreach($vo['Groups']['User'] as $keygu=>$vogu){ if($keygu<9){  ?>
+                                    <li><img width="23" height="23" src="{$vogu.avatar}" /></li>
+                                    <?php  }} ?>
+                                    </ul>
+                                </a>
+                            </div>
+                            <div class="sidebar_group_list_info">
+                                <div class="sidebar_group_list_info_title">
+                                    <a href="__APP__/Groups/discuess/gid/{$vo.Groups.idgroups}">{$vo.Groups.name}</a>
+                                </div>
+                                <div class="sidebar_group_list_info_other"><?php echo count($vo['Groups']['User']); ?>人参与</div>
+                                <div class="sidebar_group_list_info_other"><!--55%准确率<span>|</span>555人关注-->{$vo.Groups.name_info}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php } ?>
+                    <div class="list3_box_opera clearfix">
+                        <span class="fl"><?php W('Howlongtime',$vo); ?></span>
+                        <div class="fr">
+                            <?php if(!empty($vo['content_info'])){ ?>
+                            {$vo.content_info}
+                            <?php }else{ ?>
+                                <a class="link0" href="__APP__{$vo.a_action}{$vo.a_function}{$vo.a_get}{$vo.a_tictactoe}">查看</a>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+                </volist>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="sidebar_nav">
+                <ul>
+                    <li class="first"><a href="__APP__/User/letter">私信</a></li>
+                    <li><a class="this" href="__APP__/User/notice">提醒</a></li>
+                    <li class="last"><a href="">帐号设置</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+//同意进圈子
+$.on($.getClass('js_gruop_agree'),'click',function(event){
+    var e = event || window.event;
+    $.ajax({
+        url : Config['defaultUrl'] + '/Groups/agree_groups_a',
+        data : {'code':$.attr(this,'data-groups-code'),'nid':$.attr($.parents(this,'list3_box'),'data-notice-id')},
+        success : function (data) {
+            if(data['status']==1){
+                window.location.reload();
+            }
+        }
+    });
+    $.stopPropagation(e);
+});
+//拒绝进圈子
+$.on($.getClass('js_group_reject'),'click',function(event){
+    var e = event || window.event;
+    $.ajax({
+        url : Config['defaultUrl'] + '/Groups/refuse_groups_a',
+        data : {'code':$.attr(this,'data-groups-code'),'nid':$.attr($.parents(this,'list3_box'),'data-notice-id')},
+        success : function (data) {
+            if(data['status']==1){
+                window.location.reload();
+            }
+        }
+    });
+    $.stopPropagation(e);
+});
+//标记已读
+$.on($.getClass('js_notice_unread'),'click',function(){
+    $.ajax({
+        url : Config['defaultUrl'] + '/User/notice_ed_a',
+        data : {'notice_id':$.attr(this,'data-notice-id')},
+        context : this,
+        success : function (data) {
+            if(data['status']==1){
+                $.removeClass(this.context,'fb');
+            }
+        }
+    });
+});
+</script>

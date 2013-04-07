@@ -1,0 +1,22 @@
+<div class="group_edit">
+    <textarea class="form_textarea js_group_info_value" name="name_info"><?php echo $datapost['content'] ?></textarea>
+</div>
+<script type="text/javascript">
+$.on($.getClass('js_mask_submit'),'click',function(){
+    var json = $.getValue('js_group_info_value');
+    json['gid'] = '<?php echo $datapost['idgroups']; ?>';
+    if(json['js_group_info_value']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Groups/groups_info_edit_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    window.location.reload();
+                }
+            }
+        });
+    }else{
+        alert('圈子介绍不能为空!');
+    }
+});
+</script>

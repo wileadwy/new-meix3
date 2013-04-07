@@ -1,0 +1,73 @@
+		<div class="sidebar_box">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl"><?php echo $msg['name']; ?></span>
+            </div>
+            <div style="color: #666; padding: 0px 10px 10px 10px;">
+                <span class="js_group_info"><?php echo $msg['name_info']; ?></span>
+                <?php if(!empty($_SESSION['MEIX']['iduser'])&&($_SESSION['MEIX']['iduser']==$msg['user_id'])){ ?>
+                <a class="ml5 link0 js_edit_group_info" href="javascript:;">修改</a>
+                <script type="text/javascript">
+                //修改圈子介绍
+                $.on($.getClass('js_edit_group_info'),'click',function(){
+                    Common.layout('修改圈子介绍','/Theme/index',{'idgroups':'<?php echo $msg['idgroups']; ?>','content':$.html($.getClass('js_group_info')[0]),'theme':'group_edit'});
+                });
+                </script>
+                <?php } ?>
+            </div>
+            <div class="clearfix" style="border-top: 1px solid #D0CFCB; padding: 10px; color: #999;">
+                <div class="fl">
+                    <div class="">
+                        <?php echo $msg['in']; ?>人参与
+                        <?php if(!empty($_SESSION['MEIX']['iduser'])&&($_SESSION['MEIX']['iduser']==$msg['user_id'])){ ?>
+                        <a class="ml5 link0 js_edit_group_user" href="javascript:;">邀请成员</a>
+                        <script type="text/javascript">
+                        //修改圈子成员
+                        $.on($.getClass('js_edit_group_user'),'click',function(){
+                            Common.layout('邀请圈子成员','/Theme/groupsmember',{'gid':'<?php echo $msg['idgroups']; ?>'});
+                        });
+                        </script>
+                        <?php } ?>
+                    </div>
+                    <div class="f12"><?php echo $msg['accuracy']; ?>%准确率<span class="pl5 pr5">|</span>
+                    <?php echo $msg['attention']; ?>关注</div>
+                </div>
+                <a href="javascript:;" data-group-id="<?php echo $msg['idgroups']; ?>" class="button0 fr js_group_attention">
+					<?php if($msg['if_attention'] == 1){ echo '关注';}else{echo '取消关注'; } ?>
+				</a>
+                <script type="text/javascript">
+                Common.groupAttention();//关注圈子
+                </script>
+            </div>
+        </div>
+        <div class="sidebar_box mt10">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">经常讨论</span>
+            </div>
+            <div class="sidebar_box_content sidebar_tag_list clearfix">
+                <?php foreach($hot_tag as $key=>$val){ ?>
+                    <div class="sidebar_tag_list_box clearfix">
+                   	    <div class="tag fl"><a href="<?php echo C('SITEURL'); ?>/Stock/inside/id/<?php echo $val['idstock']; ?>"><?php echo $val['showname']; ?></a></div>
+                        <span class="x">X</span><span class="n"><?php echo $val['count']; ?></span>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+        <div class="sidebar_box mt10">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">活跃成员</span>
+            </div>
+            <div class="sidebar_box_content sidebar_user_list">
+	            <volist name="active" id="vo">
+	            <?php foreach($ative_user as $key=>$val){ ?>
+	                <div class="sidebar_user_list_box clearfix">
+	                    <div class="sidebar_user_list_img">
+	                        <a href="<?php echo C('SITEURL'); ?>/User/index/id/<?php echo $val['iduser']; ?>"><img src="<?php echo $val['avatar']; ?>" width="54" height="54" /></a>
+	                    </div>
+	                    <div class="sidebar_user_list_info">
+	                        <div class="sidebar_user_list_info_title"><a href="<?php echo C('SITEURL'); ?>/User/index/id/<?php echo $val['iduser']; ?>"><?php echo $val['name']; ?></a></div>
+	                        <div class="sidebar_user_list_info_other"><?php echo $val['accuracy']; ?>%准确率<span>|</span><?php echo $val['attention_count']; ?>人关注</div>
+	                    </div>
+	                </div>
+	            <?php } ?>
+            </div>
+        </div>

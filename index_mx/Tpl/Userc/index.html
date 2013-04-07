@@ -1,0 +1,122 @@
+<layout name='layout_index' />
+<div class="myRecStock">
+    <div class="myRecStock_title">我的荐股</div>
+    <div class="myRecStock_list_wrap">
+        <volist name="list" id="vo">
+        <div class="myRecStock_list">
+            <div class="myRecStock_list_title">
+                <table>
+                    <tr class="<?php 
+                    if($vo['Stocknow']['open']<$vo['Stocknow']['now']){
+                        $vo['Stocknow']['bfb'] = '+'.number_format(($vo['Stocknow']['now']-$vo['Stocknow']['open'])*100/$vo['Stocknow']['open'],2);
+                        $vo['Stocknow']['zd'] = '+'.$vo['Stocknow']['now']-$vo['Stocknow']['open'];
+                        echo 'zhang';
+                    }else{
+                        $vo['Stocknow']['bfb'] = '-'.number_format(($vo['Stocknow']['open']-$vo['Stocknow']['now'])*100/$vo['Stocknow']['open'],2);
+                        $vo['Stocknow']['zd'] = '-'.$vo['Stocknow']['open']+$vo['Stocknow']['now'];
+                        echo 'die';
+                    }?>
+                     ">
+                        <td>{$vo.stock_name}</td>
+                        <td>当前价:{$vo.Stocknow.now}</td>
+                        <td class="bj">涨跌额:<?php echo $vo['Stocknow']['zd'] ?></td>
+                        <td class="bj">涨跌幅:<?php echo $vo['Stocknow']['bfb'] ?>%</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="myRecStock_list_content">
+            <?php unset($vo2); ?>
+                <volist name="vo.huang" id="vo2" key="k2" >
+                <div class="myRecStock_list_content_list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>仓位</td>
+                                <td>日期</td>
+                                <td>状态</td>
+                                <td>价格</td>
+                                <td>有效期</td>
+                                <td>收益率</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php unset($vo3); ?>
+                            <volist name="vo2.Rec_stocks" id="vo3" key="k3" >
+                            <tr>
+                                <td>{$k2}</td>
+                                <td>{:W('Howlongtime',$vo3)}</td>
+                                <td><?php if($vo2['status']==15){ ?>
+                                        <?php if($vo2['first']=='buy'){ ?>
+                                        成功买入　<a class="button0 js_recstock_sell" data-recStock-id="{$vo3.idrec_stocks}" href="javascript:;">卖出</a>
+                                        <?php }else{ ?>
+                                        成功卖出　<a class="button0 js_recstock_buy" data-recStock-id="{$vo3.idrec_stocks}" href="javascript:;">买入</a>
+                                    <?php }}else{ 
+                                        if(($vo3['status']==11)||($vo3['status']==21)){ echo '等待'; }
+                                        if(($vo3['status']==15)||($vo3['status']==25)){ echo '成功'; }
+                                        if($vo3['moreorempty']=='buy'){ echo '买入'; }else{ echo '卖出'; }
+                                        if(($vo3['status']==10)||($vo3['status']==20)){ echo '失败'; }
+                                       } ?>
+                                </td>
+                                <td><?php if($vo2['currency_unit']==1){echo '￥';}else{echo '$';} ?>{$vo3.price_b}</td>
+                                <td><?php $datek3=($vo3['mktime_b']-$vo3['mktime_a']); if($datek3){ echo ceil($datek3/86400).'天'; }else{ echo '当时价格'; } ?></td>
+                                <td>
+                                    <?php if($vo2['status']==25&&$vo3['status']==25){ ?>
+                                    实际收益率:<?php 
+                                    foreach($vo2['Rec_stocks'] as $vor3){
+                                        if($vor3['status']==15){
+                                            if($vor3['moreorempty']=='sell'){
+                                                $price_b = $vor3['price_b']-$vo3['price_b'];
+                                            }else{
+                                                $price_b = $vo3['price_b']-$vor3['price_b'];
+                                            }
+                                        }
+                                    }
+                                    if($price_b){
+                                        echo number_format(($price_b*100/$vo3['price_b']),2);
+                                    }
+                                     ?>%
+                                    <?php }elseif($vo2['status']==15&&$vo3['status']==15){ ?>
+                                    账面收益率:<?php if($vor3['moreorempty']=='sell'){
+                                                        number_format((($vo3['price_b']-$vo['Stocknow']['now'])*100/$vo3['price_b']),2);
+                                                     }else{
+                                                        number_format((($vo['Stocknow']['now']-$vo3['price_b'])*100/$vo3['price_b']),22);
+                                                     }                                   
+                                     ?>%
+                                    <?php } ?>
+                                
+                                </td>
+                            </tr>
+                            </volist>
+                        </tbody>
+                    </table>
+                </div>
+                </volist>
+            </div>
+        </div>
+        </volist>
+    </div>
+</div>
+<script type="text/javascript">
+var common = {
+    layout : function ( options , title ) {
+        $.ajax({
+            url : Config['defaultUrl'] + '/Theme/rec_stocks_cycle3',
+            data : options,
+            success : function (data) {
+                Common.mask({
+                    back : title,
+                    content : data['data']
+                });
+            }
+        });
+    }
+};
+//二次买入
+$.on($.getClass('js_recstock_sell'),'click',function(){
+    common.layout({'rec_stocks_id':$.attr(this,'data-recStock-id')},'买入股票');
+});
+//二次卖出
+$.on($.getClass('js_recstock_buy'),'click',function(){
+    common.layout({'rec_stocks_id':$.attr(this,'data-recStock-id')},'卖出股票');
+});
+</script>

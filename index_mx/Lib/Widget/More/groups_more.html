@@ -1,0 +1,19 @@
+<a href="javascript:;" class="content_more js_group_list_more">更多</a>
+<script type="text/javascript">
+$.on($.getClass('js_group_list_more'),'click',function(){
+    var json = {};
+    json['table'] = '<?php echo $more['table']; ?>';
+    json['stock_id'] = '<?php echo $more['stock_id']; ?>';
+    json['id'] = '<?php echo $more['id']; ?>';
+    json['page'] = $.getClass('gropu_list_box').length;
+    $.ajax({
+        url : Config['defaultUrl'] + '/Groups/more_groups',
+        data : json,
+        success : function (data) {
+            if(data['status']==1){
+                $.append($.getClass('js_group_list')[0],data['data']);
+            }
+        }
+    });
+});
+</script>

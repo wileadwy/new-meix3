@@ -1,0 +1,47 @@
+<layout name='layout_index' />
+<div class="user_notice_wrap">
+    <div class="user_notice_title">我和{$user_list.name}的对话</div>
+    <div class="user_notice clearfix">
+        <div class="content letter_inside">
+            <div class="letter_inside_text">
+                <div><a class="link0" href="__APP__/User/letter">返回所有私信></a>共<?php echo count($list); ?>条私信</div>
+                <div class="tr mt20">
+                    <div><textarea class="form_textarea js_letter_value" name="content"></textarea></div>
+                    <a class="button0 mt10 js_letter_submit" href="javascript:;">发送</a>
+                </div>
+            </div>
+            <div class="letter_inside_list">
+            	<volist name="list" id="vo">
+            		<?php if($vo['fuser_id'] == $_SESSION['MEIX']['iduser']){ ?>
+	                	<div class="groups_discuess_list clearfix right"><div class="groups_discuess_list_img"><a href="/index.php/User/index/id/{$vo.fuser_id}"><img width="54" height="54" src="{$vo.fuser_avatar}"></a></div><div class="groups_discuess_list_content_wrap"><div class="groups_discuess_list_box2_wrap"><div class="groups_discuess_list_box1_name">{$vo.fuser_name}</div><div class="groups_discuess_list_box1_text">{$vo.content}</div></div><span class="icon_discuess"></span><div class="groups_discuess_list_time list1_box_opera clearfix">{:W('Howlongtime',$vo)}</div></div></div>
+	                <?php }else{ ?>
+            			<div class="groups_discuess_list clearfix left"><div class="groups_discuess_list_img"><a href="/index.php/User/index/id/{$vo.fuser_id}"><img width="54" height="54" src="{$vo.fuser_avatar}"></a></div><div class="groups_discuess_list_content_wrap"><div class="groups_discuess_list_box2_wrap"><div class="groups_discuess_list_box1_name">{$vo.fuser_name}</div><div class="groups_discuess_list_box1_text">{$vo.content}</div></div><span class="icon_discuess"></span><div class="groups_discuess_list_time list1_box_opera clearfix">{:W('Howlongtime',$vo)}</div></div></div>
+	                <?php } ?>
+            	</volist>
+            </div>
+        </div>
+        <div class="sidebar">
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$.on($.getClass('js_letter_submit'),'click',function(){
+    var json = $.getValue('js_letter_value');
+    json['user_id'] = '<?php echo $uid; ?>';
+    if(json['content']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/User/message_letter_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    $.getClass('js_letter_value')[0].value = ' ';
+                    window.location.reload();
+                }
+            }
+        });
+    }else{
+        Common.alert('私信内容不能为空!');
+    }
+});
+</script>

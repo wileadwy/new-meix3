@@ -1,0 +1,56 @@
+<layout name='layout_index' />
+<div class="groups">
+    <div class="content">
+        <div class="content_nav">
+            <ul class="clearfix">
+                <li class="content_nav_list4 first"><a href="__APP__/Groups/discuess/gid/{$groups_id}">讨论版</a></li>
+                <li class="content_nav_list4"><a href="__APP__/Groups/pointview/gid/{$groups_id}">只看观点</a></li>
+                <li class="content_nav_list4"><a href="__APP__/Groups/recstocks/gid/{$groups_id}">只看荐股</a></li>
+                <li class="content_nav_list4 last"><a class="this" href="">成员</a></li>
+            </ul>
+        </div>
+        <div class="content_user_list clearfix">
+       	    <volist name="user_list" id="vo">
+                <div class="content_user_list_box clearfix">
+	                <?php if(($vo['as'] != '10')&&$groupsfind['user_id'] == $_SESSION['MEIX']['iduser']){ ?>
+	                    <a href="javascript:;" data-user-id="{$vo.user_id}" class="content_user_list_del js_group_user_del">X</a>
+                    <?php } ?>
+                    <div class="content_user_list_img">
+                        <a href="/index.php/User/index/id/{$vo.User.iduser}"><img width="60" height="60" src="{$vo.User.avatar}" /></a>
+                    </div>
+                    <div class="content_user_list_info">
+          		        <div class="content_user_list_info_title">
+                 			<a href="/index.php/User/index/id/{$vo.User.iduser}">{$vo.User.name}</a>
+                  		</div>
+                  		<div class="content_user_list_info_other">{$vo.User.accuracy}%准确率<span><br /></span>{$vo.User.attention_count}人关注</div>
+                   	</div>
+                </div>
+            </volist>
+        </div>
+    </div>
+        <div class="sidebar">
+		<?php $data['table'] = 'groups_right'; $data['id'] = $_GET['gid']; ?>
+        {:W('Groups',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+$.on($.getClass('js_group_user_del'),'click',function(){
+    var $this = this;
+    Common.confirm({
+        content:'您确定要将此人移除圈子吗?',
+        enter_callback:function(){
+            $.ajax({
+                url : Config['defaultUrl'] + '/Groups/remove_user_groups_a',
+                data : {'uid':$.attr($this,'data-user-id'),'gid':'<?php echo $_GET['gid'];; ?>'},
+                context : $.parents($this,'content_user_list_box'),
+                success : function (data) {
+                    if(data['status']==1){
+                        $.remove(this.context);
+                        Common.maskClose();
+                    }
+                }
+            });
+        }
+    })
+});
+</script>

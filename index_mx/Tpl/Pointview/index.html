@@ -1,0 +1,58 @@
+<layout name='layout_index' />
+<div class="pointview">
+    <div class="content">
+        <div class="content_filter">
+            <div class="search fl">
+                <input class="search_text js_search" type="text" value="" />
+                <div class="search_results"></div>
+            </div>
+            <div class="select js_select fr">
+                <a class="select_show" href="javascript:;">
+	                <?php if($type == 'more'){ ?>
+						只看多
+	                <?php }elseif($type == 'empty'){ ?>
+						只看空
+	                <?php }else{ ?>
+						查看全部
+	                <?php } ?>
+                    <span class="icon_sanjiao1"></span>
+                </a>
+                <div class="select_list">
+                    <ul>
+                    	<?php if($_GET['type'] == 'more'){ ?>
+							<li><a href="__APP__/Pointview/index<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">全部</a></li>
+							<li><a href="__APP__/Pointview/index/type/empty<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看空</a></li>
+                    	<?php }elseif($_GET['type'] == 'empty'){ ?>
+                    		<li><a href="__APP__/Pointview/index<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">全部</a></li>
+                    		<li><a href="__APP__/Pointview/index/type/more<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看多</a></li>
+                    	<?php }else{ ?>
+							<li><a href="__APP__/Pointview/index/type/more<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看多</a></li>
+	                        <li><a href="__APP__/Pointview/index/type/empty<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看空</a></li>
+                    	<?php } ?>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="icon_line fr"></div>
+        </div>
+        <div class="content_list js_content_list">
+			<?php $wdata['list'] = $list; $wdata['ifmode'] = 'point_view'; ?>
+           	{:W('Rpcontent',$wdata)}
+        </div>
+        <?php $jsdata=array('url'=>'/Pointview/index_a','ifmode'=>'point_view','table'=>'list_more','type'=>$type,'stock_id'=>$stock_id); ?>
+        {:W('More',$jsdata)}
+    </div>
+    <div class="sidebar">
+        <div class="sidebar_button">
+            <a class="js_viewpoint" href="javascript:;">发布观点</a>
+        </div>
+        <?php $data['table'] = 'point_view_right'; ?>
+        {:W('Hotstocks',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+Common.tagSearch({url:'__APP__/Pointview/index<?php if(!empty($type)){ echo "/type/".$type; } ?>'});
+$.on($.getClass('js_viewpoint'),'click',function(){
+    Common.layout('发布观点','/Theme/viewpointadd',{});
+});
+</script>

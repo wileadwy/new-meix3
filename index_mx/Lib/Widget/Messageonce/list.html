@@ -1,0 +1,28 @@
+<div class="MC_list">
+    <volist name="list" id="vo" >
+    <div class="MC_list_content">
+        <div class="MC_list_user clearfix">
+            <div class="fl">
+                <a name="ml{$vo.idmessage}"></a>
+                <a class="fl" href="{$vo.user_id}"><img src="{$vo.avatar}" width="40" /></a>
+            </div>
+            <div class="fl">
+                <span><a href="">{$vo.name}</a></span><br />
+                <?php $cetime = mktime()-$vo['mktime']; 
+                    if($cetime<432000){
+                        if($cetime<86400){
+                            echo '今天';
+                        }else{
+                            echo ((int)($cetime/86400)).'天前';
+                        }
+                    }else{ ?>
+                    {$vo.mktime|date="Y-m-d H:i",###}
+                <?php } ?>
+            </div>
+        </div>
+        <div class="MC_list_text">
+            {$vo.content}
+        </div>
+    </div>
+    </volist>
+</div>

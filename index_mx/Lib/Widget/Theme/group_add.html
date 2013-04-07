@@ -1,0 +1,33 @@
+<div class="group_add">
+    <div class="group_name clearfix">
+        <span class="fl">圈子名称：</span><input type="text" name="name" class="fl js_group_value form_input" value="" />
+    </div>
+    <div class="group_content">
+        <textarea class="form_textarea js_group_value js_default_value" data-default-value="请输入圈子的描述" name="name_info">请输入圈子的描述</textarea>
+    </div>
+</div>
+<script type="text/javascript">
+//控制文本框默认值
+Common.inputDefault($.getClass('js_default_value'),'data-default-value','focus');
+//提交方法
+$.on($.getClass('js_mask_submit'),'click',function(){
+    var json = $.getValue('js_group_value');
+    if(json['content']!='请输入圈子的描述'&&json['name']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Groups/groups_add_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    window.location.reload();
+                }else{
+                    alert(data['info']);
+                }
+            }
+        });
+    }else if(json['content']=='请输入圈子的描述'){
+        alert('圈子描述不能为空!');
+    }else if(json['name']!==''){
+        alert('圈子名称不能为空!');
+    }
+});
+</script>

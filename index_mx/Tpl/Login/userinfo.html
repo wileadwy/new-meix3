@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MeiX</title>
+<link rel="stylesheet" href="__ANNEX__/css/base.css" />
+<link rel="stylesheet" href="__ANNEX__/css/login.css" />
+<script type="text/javascript" src="__ANNEX__/js/base.js"></script>
+<script type="text/javascript">
+var Config_url = '<?php echo C('SITEURL'); ?>';
+</script>
+</head>
+<body class="info_body">
+<?php if(!empty($userinfo['seqid'])){ ?>
+<input type="hidden" name="qq_name" class="js_info_value" value="{$userinfo.data.name}" />
+<input type="hidden" name="qq_nick" class="js_info_value" value="{$userinfo.data.nick}" />
+<input type="hidden" name="qq_openid" class="js_info_value" value="{$userinfo.data.openid}" />
+<input type="hidden" name="qq_seqid" class="js_info_value" value="{$userinfo.seqid}" />
+<input type="hidden" name="qq_head" class="js_info_value" value="{$userinfo.data.head}" />
+<?php } elseif(!empty($userfind['id'])){  ?>
+<input type="hidden" name="sina_id" class="js_info_value" value="{$userfind.id}" />
+<input type="hidden" name="sina_idstr" class="js_info_value" value="{$userfind.idstr}" />
+<input type="hidden" name="sina_name" class="js_info_value" value="{$userfind.name}" />
+<input type="hidden" name="sina_screen_name" class="js_info_value" value="{$userfind.screen_name}" />
+<input type="hidden" name="sina_avatar_large" class="js_info_value" value="{$userfind.avatar_large}" />
+<input type="hidden" name="sina_profile_url" class="js_info_value" value="{$userfind.profile_url}" />
+<?php } else { ?>
+<script type="text/javascript">
+$.alert({
+    content:'请尝试用其他登录方式',
+    callback : function () {
+        window.location.href = '__APP__/Login';
+    }
+})
+</script>
+<?php }; ?>
+<div class="wrap">
+    <div class="headerWrap">
+        <div class="header clearfix">
+            <div class="logo">
+                <a title="美市"></a>
+            </div>
+        </div>
+    </div>
+    <div class="mainWrap">
+        <div class="main clearfix">
+            <div class="content">
+                <div class="info_title">补充用户信息</div>
+                <div class="info_content">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td class="js_wrong"></td>
+                        </tr>
+                        <tr>
+                            <td width="60">邮箱:</td>
+                            <td>
+                                <input class="form_input js_info_value fl" placeholder="请输入您的邮箱" type="text" value="" name="username" />
+                                <div></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>密码:</td>
+                            <td><input class="form_input js_info_value fl" placeholder="输入密码" type="password" value="" name="password1" /></td>
+                        </tr>
+                        <tr>
+                            <td>确认密码:</td>
+                            <td><input class="form_input js_info_value fl" placeholder="确认密码" type="password" value="" name="password2" /></td>
+                        </tr>
+                        <tr>
+                            <td>昵称:</td>
+                            <td>{$userinfo.data.nick}{$userfind.name}</td>
+                        </tr>
+                        <tr>
+                            <td>简介:</td>
+                            <td>
+                                <textarea class="form_textarea js_info_value"  placeholder="输入您的简介" name="info">
+                                <?php if(!empty($userfind['verified_reason'])){ $vip='s'; echo $userfind['verified_reason']; }else{ echo $userfind['description']; } ?>
+                                <?php if(!empty($userinfo['data']['verifyinfo'])){ $vip='q';  echo $userinfo['data']['verifyinfo']; }else{ echo $userinfo['data']['introduction']; } ?>
+                                </textarea>
+                                <input name="vip" value="{$vip}" style="display: none;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>投资风格:</td>
+                            <td>
+                                <div class="info_tags">
+                                    <ul class="clearfix">
+                                        <li><a class="js_select_tags" href="javascript:;">事件驱动</a></li>
+                                        <li><a class="js_select_tags" href="javascript:;">长期价值</a></li>
+                                        <li><a class="js_select_tags" href="javascript:;">短期反弹</a></li>
+                                        <li><a class="js_select_tags" href="javascript:;">周期反转</a></li>
+                                        <li><a class="js_select_tags" href="javascript:;">技术波段</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <!--<tr>
+                            <td>邀请码:</td>
+                            <td><input type="text" class="form_input js_info_value fl"  placeholder="请输入邀请码" name="invite" value="" /></td>
+                        </tr>-->
+                    </table>
+                </div>
+                <div class="info_opera clearfix">
+                    <a class="js_info_submit fr button0" href="javascript:;">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footerWrap">
+        <div class="footer clearfix">
+            <ul>
+                <li><a href="">关于美市</a></li>
+                <li><span>|</span></li>
+                <li><a href="">招聘</a></li>
+                <li><span>|</span></li>
+                <li><a href="">联系我们</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var common = {
+    submit : function () {
+        var json = $.getValue('js_info_value');
+        var arr = [];
+        for(var i = 0 ; i < $.getClass('js_select').length ; i ++ ){
+            arr.push($.html($.getClass('js_select')[i]));
+        }
+        json['style'] = arr;
+        if($.isEmail(json['username'])&&(json['password1']==json['password2'])&&json['password1']!=''&&json['name']!=''&&$.getClass('js_select').length>0){
+            $.ajax({
+                type : 'POST',
+                url : Config_url + '/Login/register_1',
+                dataType : 'json',
+                data : json,
+                success : function (data) {
+                    if(data['status']=='1'){
+                        window.location.href = '__APP__/Index';
+                    }else{
+                        common.tips('wrong',data['info']);
+                    }
+                }
+            })
+        }else if(!$.isEmail(json['username'])){
+            common.tips('wrong','邮箱格式不符!');
+        }else if(json['password1']==''&&json['password2']==''){
+            common.tips('wrong','密码不能为空!!');
+        }else if(json['password1']!=json['password2']){
+            common.tips('wrong','两次密码不一致!');
+        }else if(json['name']==''){
+            common.tips('wrong','昵称不能为空!');
+        }else if($.getClass('js_select').length==0){
+            common.tips('wrong','至少选择一种投资风格!');
+        }
+    },
+    tips : function ( type , text ) {
+        $.html($.getClass('js_wrong')[0],'<div class="info_tips"></span><span class="icon_'+type+'"></span><span>'+text+'</span></div>');
+        setTimeout(function(){
+            $.remove($.getClass('info_tips')[0]);
+        },3000);
+    }
+};
+$.on($.getClass('js_info_submit'),'click',common.submit);
+$.on($.getClass('js_select_tags'),'click',function(){
+    if($.hasClass(this,'js_select')){
+        $.removeClass(this,'js_select');
+    }else{
+        $.addClass(this,'js_select');
+    };
+});
+common.tips('right','您已成功链接微博帐号，请补全信息完成注册。')
+</script>
+</body>
+</html>

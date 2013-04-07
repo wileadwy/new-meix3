@@ -1,0 +1,38 @@
+<layout name='layout_index' />
+<div class="user_notice_wrap">
+    <div class="user_notice_title">新建圈子统计</div>
+    <div class="user_notice clearfix">
+        <div class="content">
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>创建人</td>
+                            <td>圈子名称</td>
+                            <td>创建时间</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="list" id="vo">
+                        <tr>
+                            <td><a href="__APP__/User/index/id/{$vo.User.iduser}" target="_blank">{$vo.User.name}</a></td>
+                            <td><a target="_blank" href="__APP__/Groups/discuess/gid/{$vo.idgroups}">{$vo.name}</a></td>
+                            <td><?php echo date('Y-m-d h:i',$vo['mktime']); ?></td>
+                        </tr>
+                        </volist>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="sidebar_nav">
+                <ul>
+                    <li class="first"><a href="__APP__/Admin/all_notice">全部提醒</a></li>
+                    <li><a href="__APP__/Admin/rp/type/pv">观点发表</a></li>
+                    <li><a href="__APP__/Admin/rp/type/rs">荐股发表</a></li>
+                    <li class="last"><a class="this" href="__APP__/Admin/groups">新建圈子</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<layout name='layout_index' />
+<div class="user">
+    <div class="user_content">
+    	<?php $data['id'] = $iduser; $data['part'] = 'head'; ?>
+		{:W('User',$data)}
+        <div class="content mt10">
+            <div class="content_nav">
+                <ul class="clearfix">
+                    <li class="content_nav_list4 first"><a href="__APP__/User/index/id/{$iduser}">观点</a></li>
+                    <li class="content_nav_list4"><a href="__APP__/User/recstock/id/{$iduser}">荐股</a></li>
+                    <li class="content_nav_list4"><a class="this" href="__APP__/User/groups/id/{$iduser}">圈子</a></li>
+                    <li class="content_nav_list4 last"><a href="__APP__/User/favorite/id/{$iduser}">收藏</a></li>
+                </ul>
+            </div>
+            	<div class="group_list js_group_list clearfix">
+		        	<?php $data['table'] = 'user';  $data['id'] = $iduser; ?>
+	        		{:W('Groups',$data)}
+        		</div>
+		        <?php $more['table'] = 'user'; $more['stock_id'] =  $stock_id;  $more['id'] =  $iduser;   ?>
+	   			{:W('More',$more)}
+	    </div>
+    </div>
+	<div class="sidebar">
+    	<?php $data['id'] = $_GET['id'];$data['part'] = 'right';  ?>
+		{:W('User',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+//创建圈子
+$.on($.getClass('js_groups'),'click',function(){
+    Common.layout('创建圈子','/Theme/index',{'theme':'group_add'});
+});
+//浏览圈子
+$.on($.getClass('js_group_view'),'click',function(){
+    var name = $.attr(this,'data-group-name');
+    var url = $.attr(this,'data-group-url');
+    var id = $.attr(this,'data-group-id');
+    $.ajax({
+        url : Config['defaultUrl'] + '/Theme/groups_view',
+        data : {'groups_id':id},
+        success : function (data) {
+            Common.mask({
+                title : name,
+                width : '550px',
+                operate : '<a class="link0" href="'+url+'">点击进入主页 >></a>',
+                content : data['data']
+            });
+        }
+    });
+});
+</script>

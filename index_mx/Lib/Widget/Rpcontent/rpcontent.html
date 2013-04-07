@@ -1,0 +1,171 @@
+
+<?php foreach($list as $key=>$vo){ ?>
+    <?php if(!empty($vo['PV'])){ ?>
+    <div class="content_list_box clearfix">
+        <div class="content_list_left">
+            <div class="content_list_img">
+                <a href="<?php echo __APP__; ?>/User/index/id/<?php echo $vo['USER']['iduser']; ?>"><img src="<?php echo $vo['USER']['avatar']; ?>" width="54" height="54" /></a>
+            </div>
+            <a class="content_list_name" href="<?php echo __APP__; ?>/User/index/id/<?php echo $vo['USER']['iduser']; ?>"><?php echo $vo['USER']['name']; ?></a>
+        </div>
+        <div class="content_list_right">
+            <div class="content_list_text">
+                <?php if(($vo['content_t']==$vo['content'])||(ACTION_NAME=='inside')){ ?>
+                    <?php echo $vo['content']; ?>
+                <?php }else{ ?>
+                    <div class="content_list_text_less">
+                        <?php echo $vo['content_t']; ?><a class="js_content_list_text_all" href="javascript:;">显示全部</a>
+                    </div>
+               	    <div class="content_list_text_all">
+                        <?php echo $vo['content']; ?><a class="js_content_list_text_less" href="javascript:;">收起</a>
+                    </div>
+                <?php } ?>
+            </div>
+            <div class="content_list_tag mt5">
+                <ul class="clearfix">
+                    <?php foreach($vo['TAG'] as $votag){ ?>
+                    <li>
+                        <div class="tag mr5">
+                            <a href="<?php echo C('SITEURL'); ?>/Stock/inside/id/<?php echo $votag['stock_id']; ?>"><?php echo $votag['stock_name']; ?></a>
+                        </div>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </div>
+            <div class="content_list_opera clearfix">
+                <a class="fl" href="<?php echo C('SITEURL'); ?>/Pointview/inside/pid/<?php echo $vo['idpoint_view']; ?>"><?php W('Howlongtime',$vo); ?></a>
+                <div class="fr">
+                    <a class="js_viewpoint_up" data-viewpoint-id="<?php echo $vo['idpoint_view']; ?>" href="javascript:;">顶(<?php echo $vo['info_top']; ?>)</a><span>|</span>
+                    <a class="js_viewpoint_down" data-viewpoint-id="<?php echo $vo['idpoint_view']; ?>" href="javascript:;">踩(<?php echo $vo['info_poor']; ?>)</a><span>|</span>
+                    <a class="js_viewpoint_favorite" data-viewpoint-id="<?php echo $vo['idpoint_view']; ?>" href="javascript:;">收藏(<?php echo $vo['info_digest']; ?>)</a><span>|</span>
+                    <a class="js_viewpoint_message js_message_count<?php echo $vo['idpoint_view']; ?>" data-message-id="<?php echo $vo['idpoint_view']; ?>" href="javascript:;">回复(<?php echo $vo['info_message_count']; ?>)</a>
+                </div>
+            </div>
+            <div class="js_message_list_wrap content_list_message"></div>
+        </div>
+       	<?php if($vo['moreorempty']=='empty'){ ?>
+           <div class="icon_content kong"></div>
+        <?php }else{ ?>
+       	    <div class="icon_content duo"></div>
+        <?php } ?>
+    </div>
+    <?php }elseif(!empty($vo['RS'])){ ?>
+    <div class="content_list_box clearfix">
+        <div class="content_list_left">
+            <div class="content_list_img">
+                <a href="<?php echo C('SITEURL'); ?>/User/index/id/<?php echo $vo['USER']['iduser']; ?>"><img src="<?php echo $vo['USER']['avatar']; ?>" width="54" height="54" /></a>
+            </div>
+            <a class="content_list_name" href="<?php echo C('SITEURL'); ?>/User/index/id/<?php echo $vo['USER']['iduser']; ?>"><?php echo $vo['USER']['name']; ?></a>
+        </div>
+        <div class="content_list_right">
+            <?php if($vo['status']==15||$vo['status']==25){ ?>
+            <div class="icon_content chenggong"></div>
+            <?php }elseif($vo['status']==10||$vo['status']==20){ ?>
+            <div class="icon_content shibai"></div>
+            <?php }else{ ?>
+            <div class="icon_content dengdai"></div>
+            <?php } ?>
+            <div class="content_list_recinfo">
+                <?php
+                if($vo['status']==25||$vo['status']==15||$vo['status']==10||$vo['status']==20){
+                    echo '以'.$vo['price_b'].'元';
+                    if(($vo['status']==11)||($vo['status']==21)){ echo '等待'; }
+                    //if(($vo['status']==15)||($vo['status']==25)){ echo '成功'; }
+                    if($vo['moreorempty']=='sell'){ echo '卖出'; }else{ echo '买入'; }
+                    if(($vo['status']==10)||($vo['status']==20)){ echo '失败'; }
+                }else{
+                    echo '若  '.ceil(($vo['mktime_b']-$vo['mktime_a'])/86400).'天内 ';
+                }
+                ?>
+                <a class="link0" href="<?php echo C('SITEURL'); ?>/Stock/inside/id/<?php echo $vo['stocks_id']; ?>"> <?php echo $vo['stocks_name']; ?>(<?php echo $vo['stocks_number']; ?>) </a>
+                <?php
+                if($vo['status']==25||$vo['status']==15||$vo['status']==10||$vo['status']==20){
+                    if($vo['cycle']['status']==25&&$vo['status']==25){
+                        echo '实际收益率:';
+                        foreach($vo['lslist'] as $vor3){
+                            if($vor3['status']==15){
+                                if($vor3['moreorempty']=='sell'){
+                                    $price_b = $vor3['price_b']-$vo['price_b'];
+                                }else{
+                                    $price_b = $vo['price_b']-$vor3['price_b'];
+                                }
+                            }
+                        }
+                        if($price_b){
+                            echo number_format(($price_b*100/$vo['price_b']),2).'%';
+                        }
+                     }elseif($vo['status']==15){
+                        if($vor3['moreorempty']=='sell'){
+                            echo '账面收益率:'.number_format((($vo['price_b']-$vo['Stocknow']['now'])*100/$vo['price_b']),2).'%';
+                        }else{
+                            echo '账面收益率:'.number_format((($vo['Stocknow']['now']-$vo['price_b'])*100/$vo['price_b']),2).'%';
+                        }
+                     }
+                }else{
+                    echo '股价 达'.$vo['price_b'].'元 建议';
+                    if($vo['moreorempty']=='sell'){ echo '卖出'; }else{ echo '买入'; }
+                }
+                 ?>
+            </div>
+            <div class="content_list_text">
+                <?php if(($vo['content_t']==$vo['content'])||(ACTION_NAME=='inside')){ ?>
+                    <?php echo $vo['content']; ?>
+                <?php }else{ ?>
+                    <div class="content_list_text_less">
+                        <?php echo $vo['content_t']; ?><a class="js_content_list_text_all" href="javascript:;">显示全部</a>
+                    </div>
+               	    <div class="content_list_text_all">
+                        <?php echo $vo['content']; ?><a class="js_content_list_text_less" href="javascript:;">收起</a>
+                    </div>
+                <?php } ?>
+            </div>
+            <?php if(!empty($vo['lslist'])){ ?>
+            <div class="content_list_history">
+                <ul>
+                    <?php foreach($vo['lslist'] as $lsvo){ ?>
+                    <li>
+                        <div class="content_list_recinfo">
+                        <?php
+                        if($lsvo['status']==25||$lsvo['status']==15||$lsvo['status']==10||$lsvo['status']==20){
+                            echo '以'.$lsvo['price_b'].'元';
+                            if(($lsvo['status']==11)||($lsvo['status']==21)){ echo '等待'; }
+                            //if(($lsvo['status']==15)||($lsvo['status']==25)){ echo '成功'; }
+                            if($lsvo['moreorempty']=='sell'){ echo '卖出'; }else{ echo '买入'; }
+                            if(($lsvo['status']==10)||($lsvo['status']==20)){ echo '失败'; }
+                        }else{
+                            echo '若  '.ceil(($lsvo['mktime_b']-$lsvo['mktime_a'])/86400).'天内 ';
+                        }
+                        ?>
+                        <a class="link0" href="<?php echo C('SITEURL'); ?>/Stock/inside/id/<?php echo $vo['stocks_id']; ?>"> <?php echo $vo['stocks_name']; ?>(<?php echo $vo['stocks_number']; ?>) </a>
+
+                        </div>
+                        <div class="content_list_history_info"><?php W('Howlongtime',$lsvo); ?></div>
+                    </li>
+                    <?php } ?>
+                </ul>
+                <div class="icon_history"></div>
+            </div>
+            <?php } ?>
+            <div class="content_list_tag mt5 clearfix">
+                <ul class="clearfix">
+                    <li>
+                        <div class="tag">
+                            <a href="<?php echo __APP__; ?>/Stock/inside/id/<?php echo $vo['stocks_id']; ?>"><?php echo $vo['stocks_name']; ?></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content_list_opera clearfix">
+                <a class="fl" href="<?php echo __APP__; ?>/Recstocks/inside/rid/<?php echo $vo['idrec_stocks']; ?>"><?php W('Howlongtime',$vo); ?></a>
+                <div class="fr">
+                    <a class="js_recstocks_up" data-recstocks-id="<?php echo $vo['idrec_stocks']; ?>" href="javascript:;">顶(<?php echo $vo['info_top']; ?>)</a><span>|</span>
+                    <a class="js_recstocks_down" data-recstocks-id="<?php echo $vo['idrec_stocks']; ?>" href="javascript:;">踩(<?php echo $vo['info_poor']; ?>)</a><span>|</span>
+                    <a class="js_recstocks_favorite" data-recstocks-id="<?php echo $vo['idrec_stocks']; ?>" href="javascript:;">收藏(<?php echo $vo['info_digest']; ?>)</a><span>|</span>
+                    <a data-message-id="<?php echo $vo['idrec_stocks']; ?>" class="js_recstocks_message js_message_count<?php echo $vo['idrec_stocks']; ?>" href="javascript:;">回复(<?php echo $vo['info_message_count']; ?>)</a>
+                </div>
+            </div>
+            <div class="js_message_list_wrap content_list_message"></div>
+        </div>
+    </div>
+    <?php } ?>
+<?php } ?>

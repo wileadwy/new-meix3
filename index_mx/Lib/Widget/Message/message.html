@@ -1,0 +1,95 @@
+<div class="message_wrap">
+    <div class="message js_message_list">
+        <?php foreach($list as $vo){ ?>
+        <div class="message_list clearfix">
+            <div class="message_list_avatar">
+                        <a href="index.php/User/index/id/<?php echo $vo['user_id']; ?>"><img src="<?php echo $vo['avatar']; ?>" width="42" height="42" /></a>
+            </div>
+            <div class="message_list_content">
+                <div class="message_list_content_name">
+                    <?php if($vo['is_reply'] == 1 ){ ?>
+                    <a href="index.php/User/index/id/<?php echo $vo['user_id']; ?>"><?php echo $vo['name']; ?></a><span>回复</span><a href="index.php/User/index/id/<?php echo $vo['re_user_id']; ?>"><?php echo $vo['re_name']; ?></a><span>:</span>
+                    <?php }else{ ?>
+                    <a href="index.php/User/index/id/<?php echo $vo['user_id']; ?>"><?php echo $vo['name']; ?></a><span>:</span>
+                    <?php } ?>
+                </div>
+                <div class="message_list_content_text"><?php echo $vo['content']; ?></div>
+                <div class="message_list_content_info clearfix">
+                    <span class="fl"><?php echo W('Howlongtime',$vo,true); ?></span>
+                    <div class="fr">
+                        <a class="js_message_up" data-message-id="<?php echo $vo['idmessage']; ?>" href="javascript:;">顶(<?php echo $vo['info_top']; ?>)</a><span>|</span><a class="js_message_down" data-message-id="<?php echo $vo['idmessage']; ?>" href="javascript:;">踩(<?php echo $vo['info_poor']; ?>)</a><span>|</span><a class="js_reply_open"  data-message-id="<?php echo $vo['idmessage']; ?>" data-user-id="<?php echo $vo['user_id']; ?>" href="javascript:;">回复</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+    </div>
+    <div class="message_content">
+        <textarea class="form_textarea js_message_value" rows="3" name="content"></textarea>
+        <div class="tr mt10">
+            <a class="button0 js_message_submit" href="javascript:;">确定</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$.on($.getClass('js_message_submit'),'click',function(){
+    var json = $.getValue('js_message_value');
+    json['table'] = '<?php echo $data['table']; ?>';
+    json['id'] = '<?php echo $data['id']; ?>';
+    if(json['content']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Tool/message_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    $.html($.getClass('js_message_count'+json['id'])[0],'回复('+data['info']+')');
+                    $.append($.getClass('js_message_list')[0],data['data']);
+                    $.getClass('js_message_value')[0].value = ' ';
+                }
+            }
+        });
+    }else{
+        Common.alert({content:'留言内容不能为空!'});
+    }
+});
+$.live($.getClass('js_reply_open'),'click',function(){
+    if($.getClass('message_list_content_reply')[0]){
+        $.remove($.getClass('message_list_content_reply')[0]);
+    }else{
+        var html =  '<div class="message_list_content_reply">'+
+                        '<textarea rows="1" data-default-value="输入回复内容" class="form_textarea js_default_value js_reply_value" name="content">输入回复内容</textarea>'+
+                        '<div class="tr mt10">'+
+                            '<a class="link0 js_reply_exit" href="javascript:;">取消</a>'+
+                            '<a class="button0 ml10 js_reply_submit" data-message-id="'+$.attr(this,'data-message-id')+'" data-user-id="'+$.attr(this,'data-user-id')+'" href="javascript:;">确定</a>'+
+                        '</div>'+
+                    '</div>';
+        $.append($.parents(this,'message_list_content'),html);
+        Common.inputDefault($.getClass('js_default_value'),'data-default-value','focus');
+    };
+});
+$.live($.getClass('js_reply_exit'),'click',function(){
+    $.remove($.getClass('message_list_content_reply')[0]);
+});
+$.live($.getClass('js_reply_submit'),'click',function(){
+    var json = $.getValue('js_reply_value');
+    json['table'] = '<?php echo $data['table']; ?>';
+    json['id'] = '<?php echo $data['id']; ?>';
+    json['re_user'] = $.attr(this,'data-user-id');
+    if(json['content']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Tool/message_a',
+            data : json,
+            context : this,
+            success : function (data) {
+                if(data['status']==1){
+                    $.html($.getClass('js_message_count'+json['id'])[0],'回复('+data['info']+')');
+                    $.append($.getClass('js_message_list')[0],data['data']);
+                    $.remove($.parents(this.context,'message_list_content_reply'));
+                }
+            }
+        });
+    }else{
+        Common.alert({content:'回复内容不能为空!'});
+    }
+});
+</script>

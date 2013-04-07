@@ -1,0 +1,43 @@
+<layout name='layout_index' />
+<div class="stock_name">{$stockfind.showname}</div>
+<div class="stock clearfix">
+    <div class="content">
+        <div class="content_nav">
+            <ul class="clearfix">
+                <li class="content_nav_list3 first"><a href="__APP__/Stock/inside/id/{$stockfind.idstock}">观点</a></li>
+                <li class="content_nav_list3"><a <?php if($stockfind['shownumbertype']==1){ ?> href="__APP__/Stock/recstocks/id/{$stockfind.idstock}"<?php } ?> >荐股</a></li>
+                <li class="content_nav_list3 last"><a class="this" href="__APP__/Stock/groups/id/{$stockfind.idstock}">圈子</a></li>
+            </ul>
+        </div>
+        <div class="group_list js_group_list clearfix">
+            <?php $data['table'] = 'stock';  $data['id'] = $stockfind['idstock']; ?>
+        	{:W('Groups',$data)}
+        </div>
+		    <?php $more['table'] = 'stock'; $more['stock_id'] =  $stockfind['idstock'];  $more['id'] = $stockfind['idstock'];   ?>
+	   		{:W('More',$more)}
+    </div>
+    <div class="sidebar">
+    	<?php $data['table'] = 'stock'; $data['id'] = $stockfind['idstock'];?>
+    	{:W('Stock',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+//浏览圈子
+$.on($.getClass('js_group_view'),'click',function(){
+    var name = $.attr(this,'data-group-name');
+    var url = $.attr(this,'data-group-url');
+    var id = $.attr(this,'data-group-id');
+    $.ajax({
+        url : Config['defaultUrl'] + '/Theme/groups_view',
+        data : {'groups_id':id},
+        success : function (data) {
+            Common.mask({
+                title : name,
+                width : '550px',
+                operate : '<a class="link0" href="'+url+'">点击进入主页 >></a>',
+                content : data['data']
+            });
+        }
+    });
+});
+</script>

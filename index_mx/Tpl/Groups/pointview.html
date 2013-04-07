@@ -1,0 +1,62 @@
+<layout name='layout_index' />
+<div class="groups_discuess groups">
+    <div class="content">
+        <div class="content_nav">
+            <ul class="clearfix">
+                <li class="content_nav_list4 first"><a href="__APP__/Groups/discuess/gid/{$groups_id}">讨论版</a></li>
+                <li class="content_nav_list4"><a class="this" href="__APP__/Groups/pointview/gid/{$groups_id}">只看观点</a></li>
+                <li class="content_nav_list4"><a href="__APP__/Groups/recstocks/gid/{$groups_id}">只看荐股</a></li>
+                <li class="content_nav_list4 last"><a href="__APP__/Groups/ingroups/gid/{$groups_id}">成员</a></li>
+            </ul>
+        </div>
+        <div class="content_filter">
+            <div class="search fl">
+                <input class="search_text js_search" type="text" value="" />
+                <div class="search_results"></div>
+            </div>
+            <div class="select js_select fr">
+                <a class="select_show" href="javascript:;">
+	                <?php if($type == 'more'){ ?>
+						只看多
+	                <?php }elseif($type == 'empty'){ ?>
+						只看空
+	                <?php }else{ ?>
+						查看全部
+	                <?php } ?>
+                    <span class="icon_sanjiao1"></span>
+                </a>
+                <div class="select_list">
+                    <ul>
+                    	<?php if($type == 'more'){ ?>
+							<li><a href="__APP__/Groups/pointview<?php if($groups_id != ''){ echo '/gid/'.$groups_id; } if($stock_id != ''){ echo '/sid/'.$stock_id; } ?>">全部</a></li>
+							<li><a href="__APP__/Groups/pointview/type/empty<?php if($groups_id != ''){ echo '/gid/'.$groups_id; } if($stock_id != ''){ echo '/sid/'.$stock_id; } ?>">只看空</a></li>
+                    	<?php }elseif($type == 'empty'){ ?>
+                    		<li><a href="__APP__/Groups/pointview<?php if($groups_id != ''){ echo '/gid/'.$groups_id; } if($stock_id != ''){ echo '/sid/'.$stock_id; } ?>">全部</a></li>
+                    		<li><a href="__APP__/Groups/pointview/type/more<?php if($groups_id != ''){ echo '/gid/'.$groups_id; } if($stock_id != ''){ echo '/sid/'.$stock_id; } ?>">只看多</a></li>
+                    	<?php }else{ ?>
+							<li><a href="__APP__/Groups/pointview/type/more<?php if($groups_id != ''){ echo '/gid/'.$groups_id; } if($stock_id != ''){ echo '/sid/'.$stock_id; } ?>">只看多</a></li>
+	                        <li><a href="__APP__/Groups/pointview/type/empty<?php if($groups_id != ''){ echo '/gid/'.$groups_id; } if($stock_id != ''){ echo '/sid/'.$stock_id; } ?>">只看空</a></li>
+                    	<?php } ?>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="icon_line fr"></div>
+        </div>
+        <div class="content_list js_content_list">
+	        <?php $wdata['list'] = $list; $wdata['ifmode'] = 'point_view'; ?>
+           	{:W('Rpcontent',$wdata)}
+
+
+        </div>
+        <?php $jsdata=array('url'=>'/Groups/pointview_a','ifmode'=>'point_view','table'=>'list_more','type'=>$type,'stock_id'=>$stock_id); ?>
+        {:W('More',$jsdata)}
+    </div>
+    <div class="sidebar">
+		<?php $data['table'] = 'groups_right'; $data['id'] = $groups_id; ?>
+        {:W('Groups',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+Common.tagSearch({url:'__APP__/Groups/pointview/gid/<?php echo $groups_id; ?><?php if(!empty($type)){ echo "/type/".$type; } ?>'}); //搜索
+</script>

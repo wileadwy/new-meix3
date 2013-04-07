@@ -1,0 +1,38 @@
+        <div class="sidebar_box">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">关注了<?php echo $right['me_attention']['count']; ?>人</span>
+            </div>
+            <div class="sidebar_box_content sidebar_user_list clearfix">
+           	    <?php foreach($right['me_attention']['list'] as $vo){ ?>
+                    <div class="sidebar_user_list_box clearfix">
+                        <div class="sidebar_user_list_img">
+                            <a href="__APP__/User/index/id/<?php echo $vo['User']['iduser']; ?>"><img src="<?php echo $vo['User']['avatar']; ?>" width="54" height="54" /></a>
+   	                    </div>
+   	                    <div class="sidebar_user_list_info">
+                            <div class="sidebar_user_list_info_title"><a href="__APP__/User/index/id/<?php echo $vo['User']['iduser']; ?>"><?php echo $vo['User']['name']; ?></a></div>
+   	                        <div class="sidebar_user_list_info_other"><?php echo $vo['User']['accuracy']; ?>%准确率<span>|</span><?php echo $vo['attention_count']; ?>人关注</div>
+   	                    </div>
+   	                </div>
+                <?php } ?>
+            </div>
+		</div>
+        <div class="sidebar_box mt10">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl"><?php echo $right['attention_me']['count']; ?>人关注</span>
+            </div>
+            <div class="sidebar_box_content sidebar_user_list clearfix">
+                <?php foreach($right['attention_me']['list'] as $vo){ ?>
+                    <div class="sidebar_user_list_box clearfix">
+                        <div class="sidebar_user_list_img">
+                            <a href="__APP__/User/index/id/<?php echo $vo['User']['iduser']; ?>"><img src="<?php echo $vo['User']['avatar']; ?>" width="54" height="54" /></a>
+   	                    </div>
+   	                    <div class="sidebar_user_list_info">
+                            <div class="sidebar_user_list_info_title"><a href="__APP__/User/index/id/<?php echo $vo['User']['iduser']; ?>"><?php echo $vo['User']['name']; ?></a></div>
+   	                        <div class="sidebar_user_list_info_other"><?php echo $vo['User']['accuracy']; ?>%准确率<span>|</span><?php echo $vo['attention_count']; ?>人关注</div>
+   	                    </div>
+   	                </div>
+                <?php } ?>
+            </div>
+        </div>
+        <?php $data['table'] = 'user_right'; $data['id'] = $user_id; ?>
+        {:W('Hotstocks',$data)}

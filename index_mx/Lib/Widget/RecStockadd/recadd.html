@@ -1,0 +1,172 @@
+<div class="recommendedStock_add">
+    <div class="ml20 mr20">
+        <table style="width: 460px;">
+            <tr>
+                <td width="75" align="left">股票 :</td>
+                <td align="left">
+                    <div class="recommendedStock_search clearfix">
+                        <div class="fl tag_list">
+                            <ul class="recommendedStock_search_show"></ul>
+                        </div>
+                        <input type="text" name="code" class="fl js_default_value js_recommendedStock_search" data-default-value="输入股票名称" value="输入股票名称" />
+                        <div class="recommendedStock_search_list tag_list">
+                            <ul class="clearfix js_recommendedStock_search_list"></ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">当前价格 :</td>
+                <td align="left" class="js_recommendedStock_now_peice"></td>
+            </tr>
+            <tr>
+                <td align="left">交易类型 :</td>
+                <td align="left">
+                    <select class="form_select js_recommendedStock_value" name="first">
+                        <option value="buy">买入</option>
+                        <option value="sell">卖出</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td><input type="radio" class="js_rec_dangqianjia" checked="" name="price" /> 当前价格</td>
+                <td><input type="radio" class="js_rec_xiandingjia" name="price" /> 限定价 <input disabled="" type="text" class="js_recommendedStock_price js_rec_disabled js_recommendedStock_value form_input" name="price_b" value="" /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <span class="pl15 pr5">有效期</span>
+                    <select name="mktime_b" disabled="" class="form_select js_rec_disabled js_recommendedStock_value">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                    </select> 天
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="recommendedStock_content">
+        <textarea class="form_textarea js_recommendedStock_value js_default_value" data-default-value="输入您推荐的理由" name="content">输入您推荐的理由</textarea>
+    </div>
+    <div class="viewpoint_group">
+        <div>同时发布到以下圈子</div>
+        <ul class="clearfix">
+            <?php foreach($list as $vo){ ?>
+            <li><input type="checkbox" <?php if(!empty($group_id)&&($group_id==$vo['idgroups'])){ echo 'checked=""'; }; ?> class="js_recommendedStock_groups" value="<?php echo $vo['idgroups']; ?>" /><span><?php echo $vo['name']; ?></span></li>
+            <?php } ?>
+            
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+var price = false;
+//控制文本框默认值
+Common.inputDefault($.getClass('js_default_value'),'data-default-value','focus');
+//查询股票
+$.on($.getClass('js_recommendedStock_search'),'keyup',function(){
+    var data = $.getValue('js_recommendedStock_search');
+    data['notin'] = new Array();
+    for(var i = 0 ; i < $.getClass('js_search_tag_select').length ; i ++ ){
+        data['notin'][i] = $.attr($.getClass('js_search_tag_select')[i],'data-tag-id');
+    };
+    data['levelin'] = 31;
+    data['type'] = 'hs';
+    if(data['code']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Tool/tool_search_stock_a',
+            data : data,
+            success : function (data) {
+                if(data['status']==1){
+                    var html = '';
+                    for(var k in data['data']){
+                        html += '<li class="tag"><a data-tag-id="'+data['data'][k]['idstock']+'" class="js_search_tag_add" href="javascript:;">'+data['data'][k]['showname']+'</a></li>'
+                    }
+                    $.html($.getClass('js_recommendedStock_search_list')[0],html);
+                    $.addClass($.getClass('recommendedStock_search')[0],'show');
+                    //读取股票默认参数
+                    $.on($.getClass('js_search_tag_add'),'click',function(){
+                        var $this = this;
+                        $.ajax({
+                            url : Config['defaultUrl'] + '/Tool/tool_stock_now_a',
+                            data : {'stock':$.attr($this,'data-tag-id')},
+                            success : function (data) {
+                                if(data['status']==1){
+                                    $.html($.getClass('js_recommendedStock_now_peice')[0],data['data']);
+                                    $.html($.getClass('recommendedStock_search_show')[0],'<li class="tag"><a class="js_search_tag_select" data-tag-id="'+$.attr($this,'data-tag-id')+'">'+$.html($this)+'</a><a class="js_recommendedStock_del" href="javascript:;">X</a></li>');
+                                    $.removeClass($.getClass('recommendedStock_search')[0],'show');
+                                    $.getClass('js_recommendedStock_search')[0].value = '';
+                                    $.getClass('js_recommendedStock_search')[0].focus();
+                                    $.on($.getClass('js_recommendedStock_del'),'click',function(){
+                                        $.html($.getClass('recommendedStock_search_show')[0],' ');
+                                        $.html($.getClass('js_recommendedStock_now_peice')[0],' ');
+                                    });
+                                }
+                            }
+                        });
+                    });
+                }else{
+                    $.html($.getClass('js_recommendedStock_search_list')[0],'无搜索结果!');
+                    $.addClass($.getClass('recommendedStock_search')[0],'show');
+                }
+            }
+        });
+    }else{
+        $.html($.getClass('js_recommendedStock_search_list')[0],' ');
+        $.removeClass($.getClass('recommendedStock_search')[0],'show');
+    }
+});
+//提交方法
+$.on($.getClass('js_mask_submit'),'click',function(){
+    var json = $.getValue('js_recommendedStock_value');
+    json['groups'] = new Array();
+    //获取圈子ID
+    for(var i = 0 ; i < $.getClass('js_recommendedStock_groups').length ; i ++ ){
+        if($.getClass('js_recommendedStock_groups')[i].checked){
+            json['groups'].push($.getClass('js_recommendedStock_groups')[i].value);
+        }
+    };
+    json['stocks_id'] = $.attr($.getClass('js_search_tag_select')[0],'data-tag-id');
+    json['price_a'] = $.html($.getClass('js_recommendedStock_now_peice')[0]);
+    if(json['content']=='输入您推荐的理由'){
+        json['content'] = '';
+    };
+    if(!price){
+        json['price_b'] = json['price_a'];
+        json['mktime_b'] = '0';
+    };
+    if(json['stocks_id']!=''&&json['price_b']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Recstocks/rec_add_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    window.location.reload();
+                }
+            }
+        });
+    }else if(json['stocks_id']==''||json['stocks_id']==undefined){
+        alert('股票不能为空!');
+    }else if(json['price_b']==''){
+        alert('限定价格不能为空!');
+    }
+});
+//切换价格类型
+$.on($.getClass('js_rec_dangqianjia'),'change',function(){
+    price = false;
+    $.each($.getClass('js_rec_disabled'),function(target){
+        target.disabled = true;
+    });
+});
+$.on($.getClass('js_rec_xiandingjia'),'change',function(){
+    price = true;
+    $.each($.getClass('js_rec_disabled'),function(target){
+        target.disabled = false;
+    });
+});
+</script>

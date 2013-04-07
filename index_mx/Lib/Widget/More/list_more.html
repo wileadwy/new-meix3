@@ -1,0 +1,21 @@
+<a href="javascript:;" class="content_more js_content_list_more">更多</a>
+<script type="text/javascript">
+$.on($.getClass('js_content_list_more'),'click',function(){
+    var json = {};
+    json['type'] = '<?php echo $type; ?>';
+    json['ifmode'] = '<?php echo $ifmode; ?>';
+    json['stock_id'] = '<?php echo $stock_id; ?>';
+    json['table'] = '<?php echo $table; ?>'
+    json['start'] = $.getClass('content_list_box').length;
+    json['user_id'] = '<?php echo $user_id; ?>'
+    $.ajax({
+        url : Config['defaultUrl'] + '<?php echo $url; ?>',
+        data : json,
+        success : function (data) {
+            if(data['status']==1){
+                $.append($.getClass('js_content_list')[0],data['data']);
+            }
+        }
+    });
+});
+</script>

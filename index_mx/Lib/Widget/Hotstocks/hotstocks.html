@@ -1,0 +1,13 @@
+		<div class="sidebar_box mt10">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">经常讨论</span>
+            </div>
+            <div class="sidebar_box_content sidebar_tag_list">
+                <volist name='list' id="rate_vo">
+                    <div class="sidebar_tag_list_box">
+                        <div class="tag fl"><a href="__APP__/Stock/inside/id/{$rate_vo.idstock}">{$rate_vo.showname}</a></div>
+                        <span class="x">x</span><span class="n">{$rate_vo.count}</span>
+                    </div>
+                </volist>
+            </div>
+        </div>

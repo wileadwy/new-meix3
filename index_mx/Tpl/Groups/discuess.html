@@ -1,0 +1,110 @@
+<layout name='layout_index' />
+<div class="groups_discuess groups">
+    <div class="content">
+        <div class="content_nav">
+            <ul class="clearfix">
+                <li class="content_nav_list4 first"><a class="this" href="__APP__/Groups/discuess/gid/{$groups_id}">讨论版</a></li>
+                <li class="content_nav_list4"><a href="__APP__/Groups/pointview/gid/{$groups_id}">只看观点</a></li>
+                <li class="content_nav_list4"><a href="__APP__/Groups/recstocks/gid/{$groups_id}">只看荐股</a></li>
+                <li class="content_nav_list4 last"><a href="__APP__/Groups/ingroups/gid/{$groups_id}">成员</a></li>
+            </ul>
+        </div>
+        <div class="groups_discuess_wrap">
+            <a class="groups_discuess_more js_discuess_list_more" href="javascript:;">点击加载更多记录</a>
+            <script type="text/javascript">
+            $.on($.getClass('js_discuess_list_more'),'click',function(){
+                var json = {};
+                json['id'] = '<?php echo $groups_id; ?>';
+                json['start'] = $.getClass('groups_discuess_list').length;
+                $.ajax({
+                    url : Config['defaultUrl'] + '/Groups/discuess_a',
+                    data : json,
+                    success : function (data) {
+                        if(data['status']==1){
+                            $.prepend($.getClass('groups_discuess_content')[0],data['data']);
+                        }
+                    }
+                });
+            });
+            </script>
+            <div class="groups_discuess_content">
+            <?php $wdata['list'] = $list; $wdata['ifmode'] = 'mix'; $wdata['rehtml'] = 'red'; ?>
+   	        {:W('Rpcontent',$wdata)}
+            </div>
+            <div class="groups_discuess_text">
+                <textarea name="content" class="form_textarea js_discuess_content"></textarea>
+                <div class="clearfix groups_discuess_options">
+                    <a class="icon_xiala fr js_discuess_opera" href="javascript:;"></a><a class="button0 fr js_discuess_submit" href="javascript:;">发送</a>
+                    <div class="groups_discuess_options_list">
+                        <ul>
+                            <li><a class="js_viewpoint" href="javascript:;">发布观点</a></li>
+                            <li><a class="js_recommendedStock" href="javascript:;">发布荐股</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar">
+		<?php $data['table'] = 'groups_right'; $data['id'] = $_GET['gid']; ?>
+        {:W('Groups',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+Config['idGroup'] = '<?php echo $groupsfind['idgroups']; ?>';
+//控制下拉框
+$.on($.getClass('js_discuess_opera'),'click',function(event){
+    var e = event || window.event;
+    var $this = $.getClass('groups_discuess_options')[0];
+    if($.hasClass($this,'show')){
+        $.removeClass($this,'show');
+    }else{
+        $.addClass($this,'show');
+        $.on($.getClass('groups_discuess_options_list'),'click',function(event){
+            var e = event || window.event;
+            $.stopPropagation(e);
+        });
+        $.on(document,'click',function(){
+            $.removeClass($this,'show');
+        });
+         $.stopPropagation(e);
+    }
+});
+//发布观点
+$.on($.getClass('js_viewpoint'),'click',function(){
+    Common.layout('发布观点','/Theme/viewpointadd',{'group_id':Config['idGroup']});
+});
+//发布荐股
+$.on($.getClass('js_recommendedStock'),'click',function(){
+    Common.layout('发布荐股','/Theme/recstockadd',{'group_id':Config['idGroup']});
+});
+//发布消息
+$.on($.getClass('js_discuess_submit'),'click',function(){
+    var json = $.getValue('js_discuess_content');
+    json['groups'] = Config['idGroup'];
+    if(json['content']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Groups/discuss_add_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    $.getClass('js_discuess_content')[0].value = '';
+                    //window.location.reload();
+                    $.html($.getClass('groups_discuess_content')[0],data['data']);
+                }
+            }
+        });
+    }else if(json['content']==''){
+        Common.alert({content:'留言内容不能为空!'});
+    }
+});
+//转成观点
+$.on($.getClass('js_group_change'),'click',function(){
+    var id = $.attr(this,'data-discuess-id');
+    Common.layout('转成观点','/Theme/index',{'idgroups_list':id,'theme':'discuess_change'});
+});
+//跳转链接
+$.on($.getClass('groups_discuess_list'),'click',function(){
+    window.location.href = $.attr(this,'data-url');
+});
+</script>

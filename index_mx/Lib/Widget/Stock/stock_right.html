@@ -1,0 +1,18 @@
+		<div class="sidebar_box">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">相关成员</span>
+            </div>
+            <div class="sidebar_box_content sidebar_user_list">
+	            <?php foreach($list as $key=>$val){ ?>
+	                <div class="sidebar_user_list_box clearfix">
+	                    <div class="sidebar_user_list_img">
+	                        <a href="<?php echo C('SITEURL'); ?>/User/index/id/<?php echo $val['iduser']; ?>"><img src="<?php echo $val['avatar']; ?>" width="54" height="54" /></a>
+	                    </div>
+	                    <div class="sidebar_user_list_info">
+	                        <div class="sidebar_user_list_info_title"><a href="<?php echo C('SITEURL'); ?>/User/index/id/<?php echo $val['iduser']; ?>"><?php echo $val['name']; ?></a></div>
+	                        <div class="sidebar_user_list_info_other"><?php echo $val['accuracy']; ?>%准确率<span>|</span><?php echo $val['attention_count']; ?>人关注</div>
+	                    </div>
+	                </div>
+	            <?php } ?>
+            </div>
+        </div>

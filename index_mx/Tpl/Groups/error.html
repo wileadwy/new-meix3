@@ -1,0 +1,24 @@
+<layout name='layout_index' />
+<div class="groups_discuess groups">
+    <div class="content">
+        <div class="content_nav">
+            <ul class="clearfix">
+                <li class="content_nav_list4 first"><a class="this" href="__APP__/Groups/discuess/gid/{$groups_id}">讨论版</a></li>
+                <li class="content_nav_list4"><a href="__APP__/Groups/pointview/gid/{$groups_id}">只看观点</a></li>
+                <li class="content_nav_list4"><a href="__APP__/Groups/recstocks/gid/{$groups_id}">只看荐股</a></li>
+                <li class="content_nav_list4 last"><a href="__APP__/Groups/ingroups/gid/{$groups_id}">成员</a></li>
+            </ul>
+        </div>
+        <div style="padding: 200px 0; color: #666; text-align: center; font-size: 18px;">
+            <a class="button0 js_group_apply" data-group-id="<?php echo $_GET['gid']; ?>" style="font-size: 14px;" href="javascript:;">申请加入</a><br /><br />
+            仅该圈子内部成员可以查看讨论版。<br />你可以申请加入该圈子，或者只看圈子观点、荐股。
+        </div>
+    </div>
+    <div class="sidebar">
+		<?php $data['table'] = 'groups_right'; $data['id'] = $_GET['gid']; ?>
+        {:W('Groups',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+Common.groupApply();//申请进入圈子
+</script>

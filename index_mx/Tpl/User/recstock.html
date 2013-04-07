@@ -1,0 +1,72 @@
+<layout name='layout_index' />
+<div class="user">
+    <div class="user_content">
+        <?php $data['id'] = $_GET['id']; $data['part'] = 'head'; ?>
+		{:W('User',$data)}
+        <div class="content mt10">
+            <div class="content_nav">
+                <ul class="clearfix">
+                    <li class="content_nav_list4 first"><a href="__APP__/User/index/id/{$iduser}">观点</a></li>
+                    <li class="content_nav_list4"><a  class="this" href="__APP__/User/recstock/id/{$iduser}">荐股</a></li>
+                    <li class="content_nav_list4"><a href="__APP__/User/groups/id/{$iduser}">圈子</a></li>
+                    <li class="content_nav_list4 last"><a href="__APP__/User/favorite/id/{$iduser}">收藏</a></li>
+                </ul>
+            </div>
+            <div class="content_filter">
+	            <div class="search fl">
+	                <input class="search_text js_search" type="text" value="" />
+	                <div class="search_results"></div>
+	            </div>
+	            <div class="select js_select fr">
+	                <a class="select_show" href="javascript:;">
+						<?php if($type == 'success'){ ?>
+							只看成功
+		                <?php }elseif($type == 'lose'){ ?>
+							只看失败
+		                <?php }elseif($type == 'ondo'){ ?>
+							只看进行
+		                <?php }else{ ?>
+							查看全部
+		                <?php } ?>
+
+	                <span class="icon_sanjiao1"></span></a>
+	                <div class="select_list">
+	                    <ul>
+	                        <?php if($type == 'success'){ ?>
+								<li><a href="__APP__/User/recstock/id/{$iduser}<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">查看全部</a></li>
+								<li><a href="__APP__/User/recstock/id/{$iduser}/type/lose<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看失败</a></li>
+								<li><a href="__APP__/User/recstock/id/{$iduser}/type/ondo<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看进行</a></li>
+	                    	<?php }elseif($type == 'lose'){ ?>
+	                    		<li><a href="__APP__/User/recstock/id/{$iduser}<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">查看全部</a></li>
+	                    		<li><a href="__APP__/User/recstock/id/{$iduser}/type/success<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看成功</a></li>
+								<li><a href="__APP__/User/recstock/id/{$iduser}/type/ondo<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看进行</a></li>
+	                    	<?php }elseif($type == 'ondo'){ ?>
+	                    		<li><a href="__APP__/User/recstock/id/{$iduser}<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">查看全部</a></li>
+	                    		<li><a href="__APP__/User/recstock/id/{$iduser}/type/success<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看成功</a></li>
+								<li><a href="__APP__/User/recstock/id/{$iduser}/type/lose<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看失败</a></li>
+	                    	<?php }else{ ?>
+								<li><a href="__APP__/User/recstock/id/{$iduser}/type/success<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看成功</a></li>
+		                        <li><a href="__APP__/User/recstock/id/{$iduser}/type/lose<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看失败</a></li>
+								<li><a href="__APP__/User/recstock/id/{$iduser}/type/ondo<?php if($stock_id != ''){ echo '/sid/'.$stock_id; }?>">只看进行</a></li>
+	                    	<?php } ?>
+	                    </ul>
+	                </div>
+	            </div>
+	            <div class="icon_line fr"></div>
+	        </div>
+	        <div class="content_list js_content_list">
+		        <?php $wdata['list'] = $list; $wdata['ifmode'] = 'user_rec_stocks'; ?>
+	        	{:W('Rpcontent',$wdata)}
+	        </div>
+	        <?php $jsdata=array('url'=>'/User/my_rec_stocks_a','ifmode'=>'rec_stocks','table'=>'list_more','type'=>$type,'stock_id'=>$stock_id,'user_id'=>$iduser); ?>
+        	{:W('More',$jsdata)}
+        </div>
+    </div>
+	<div class="sidebar">
+    	<?php $data['id'] = $_GET['id'];$data['part'] = 'right';  ?>
+		{:W('User',$data)}
+    </div>
+</div>
+<script type="text/javascript">
+Common.tagSearch({url:'__APP__/User/recstock/id/<?php echo $iduser; ?><?php if(!empty($type)){ echo "/type/".$type; } ?>'}); //搜索
+</script>

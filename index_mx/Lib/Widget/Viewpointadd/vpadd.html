@@ -1,0 +1,73 @@
+<div class="viewpoint_add">
+    <div class="viewpoint_content">
+        <textarea class="form_textarea js_viewpoint_value js_default_value" data-default-value="输入您想发表的观点" name="content">输入您想发表的观点</textarea>
+    </div>
+    <div class="search_tag">
+        <div class="tag_list clearfix pr">
+            <ul class="search_tag_show js_search_tag_show">
+                
+            </ul>
+            <div class="search_tag_text">
+                <input type="text" name="code" class="js_default_value js_search_tag" data-default-value="增加标签" value="增加标签" />
+                <div class="search_tag_list tag_list">
+                    <ul class="clearfix js_tag_list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="viewpoint_type">
+        <input type="radio" class="js_viewpoint_moreorempty" checked="" value="more" name="moreorempty" /><span>看多</span><input class="js_viewpoint_moreorempty" value="empty" type="radio" name="moreorempty" /><span>看空</span>
+    </div>
+    <div class="viewpoint_group">
+        <div>同时发布到以下圈子</div>
+        <ul class="clearfix">
+            <?php foreach($list as $vo){ ?>
+            <li><input type="checkbox" <?php if(!empty($group_id)&&($group_id==$vo['idgroups'])){ echo 'checked=""'; }; ?> class="js_viewpoint_groups" value="<?php echo $vo['idgroups']; ?>" /><span><?php echo $vo['name']; ?></span></li>
+            <?php } ?>
+            
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+//标签搜索
+Common.searchTag({'levelin':'21,31,41','limitnum':'','pagenum':''});
+//控制文本框默认值
+Common.inputDefault($.getClass('js_default_value'),'data-default-value','focus');
+//提交方法
+$.on($.getClass('js_mask_submit'),'click',function(){
+    var json = $.getValue('js_viewpoint_value');
+    json['stocks'] = new Array();
+    json['groups'] = new Array();
+    //获取标签ID
+    for(var i = 0 ; i < $.getClass('js_search_tag_select').length ; i ++ ){
+        json['stocks'].push($.attr($.getClass('js_search_tag_select')[i],'data-tag-id'));
+    };
+    //获取多空
+    for(var i = 0 ; i < $.getClass('js_viewpoint_moreorempty').length ; i ++ ){
+        if($.getClass('js_viewpoint_moreorempty')[i].checked){
+            json['moreorempty'] = $.getClass('js_viewpoint_moreorempty')[i].value;
+        }
+    };
+    //获取圈子ID
+    for(var i = 0 ; i < $.getClass('js_viewpoint_groups').length ; i ++ ){
+        if($.getClass('js_viewpoint_groups')[i].checked){
+            json['groups'].push($.getClass('js_viewpoint_groups')[i].value);
+        }
+    };
+    if(json['content']!='输入您想发表的观点'&&json['stocks']!=''){
+        $.ajax({
+            url : Config['defaultUrl'] + '/Pointview/pv_add_a',
+            data : json,
+            success : function (data) {
+                if(data['status']==1){
+                    window.location.reload();
+                }
+            }
+        });
+    }else if(json['content']=='输入您想发表的观点'){
+        alert('观点内容不能为空!');
+    }else if(json['stocks']!==''){
+        alert('标签不能为空!');
+    }
+});
+</script>

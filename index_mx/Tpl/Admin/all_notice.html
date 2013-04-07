@@ -1,0 +1,97 @@
+<layout name='layout_index' />
+<div class="user_notice_wrap">
+    <div class="user_notice_title">全部提醒</div>
+    <div class="user_notice clearfix">
+        <div class="content">
+            <div class="list3">
+                <volist name="list" id="vo">
+                <?php if($vo['type'] == 'application_groups'){ ?>
+	                <div class="list3_box <?php if($vo['ed']==1){ echo 'js_notice_unread'; }; ?>" data-notice-id="{$vo.idnotice}">
+	                    <div class="list3_box_info">
+	                        <a href="">{$vo.name}</a>申请加入<a target="_blank" href="__APP__/User/index/id/{$vo.User.iduser}">{$vo.User.name}</a>的圈子
+	                    </div>
+	                    <?php if(!empty($vo['Groups'])){ ?>
+		                    <div class="list3_box_content">
+		                        <div class="sidebar_group_list_box clearfix">
+		                            <div class="sidebar_group_list_img img<?php if(count($vo['Groups']['User'])<=4){ echo '4';}else{ echo '9';} ?>">
+		                                <a target="_blank" href="__APP__/Groups/discuess/gid/{$vo.Groups.idgroups}">
+		                                    <ul class="clearfix">
+		                                    <?php foreach($vo['Groups']['User'] as $keygu=>$vogu){ if($keygu<9){  ?>
+		                                    <li><img width="23" height="23" src="{$vogu.avatar}" /></li>
+		                                    <?php  }} ?>
+		                                    </ul>
+		                                </a>
+		                            </div>
+		                            <div class="sidebar_group_list_info">
+		                                <div class="sidebar_group_list_info_title">
+		                                    <a target="_blank" href="__APP__/Groups/discuess/gid/{$vo.Groups.idgroups}">{$vo.Groups.name}</a>
+		                                </div>
+		                                <div class="sidebar_group_list_info_other"><?php echo count($vo['Groups']['User']); ?>人参与</div>
+		                                <div class="sidebar_group_list_info_other"><!--55%准确率<span>|</span>555人关注-->{$vo.Groups.name_info}</div>
+		                            </div>
+		                        </div>
+		                    </div>
+	                    <?php } ?>
+	                    <div class="list3_box_opera clearfix">
+	                        <span class="fl"><?php W('Howlongtime',$vo); ?></span>
+	                    </div>
+	                </div>
+                <?php }elseif($vo['type'] == 'invite_groups'){ ?>
+					<div class="list3_box <?php if($vo['ed']==1){ echo 'js_notice_unread'; }; ?>" data-notice-id="{$vo.idnotice}">
+	                    <div class="list3_box_info">
+	                        <a target="_blank" href="__APP__/User/index/id/{$vo.Groups.user_id}">{$vo.name}</a>邀请<a target="_blank" href="__APP__/User/index/id/{$vo.User.iduser}">{$vo.User.name}</a>加入圈子
+	                    </div>
+	                    <?php if(!empty($vo['Groups'])){ ?>
+		                    <div class="list3_box_content">
+		                        <div class="sidebar_group_list_box clearfix">
+		                            <div class="sidebar_group_list_img img<?php if(count($vo['Groups']['User'])<=4){ echo '4';}else{ echo '9';} ?>">
+		                                <a target="_blank" href="__APP__/Groups/discuess/gid/{$vo.Groups.idgroups}">
+		                                    <ul class="clearfix">
+		                                    <?php foreach($vo['Groups']['User'] as $keygu=>$vogu){ if($keygu<9){  ?>
+		                                    <li><img width="23" height="23" src="{$vogu.avatar}" /></li>
+		                                    <?php  }} ?>
+		                                    </ul>
+		                                </a>
+		                            </div>
+		                            <div class="sidebar_group_list_info">
+		                                <div class="sidebar_group_list_info_title">
+		                                    <a target="_blank" href="__APP__/Groups/discuess/gid/{$vo.Groups.idgroups}">{$vo.Groups.name}</a>
+		                                </div>
+		                                <div class="sidebar_group_list_info_other"><?php echo count($vo['Groups']['User']); ?>人参与</div>
+		                                <div class="sidebar_group_list_info_other"><!--55%准确率<span>|</span>555人关注-->{$vo.Groups.name_info}</div>
+		                            </div>
+		                        </div>
+		                    </div>
+	                    <?php } ?>
+	                    <div class="list3_box_opera clearfix">
+	                        <span class="fl"><?php W('Howlongtime',$vo); ?></span>
+	                    </div>
+	                </div>
+                <?php }elseif($vo['type'] == 'message'){ ?>
+					<div class="list3_box <?php if($vo['ed']==1){ echo 'fb js_notice_unread'; }; ?>" data-notice-id="{$vo.idnotice}">
+	                    <div class="list3_box_info">
+	                        <a target="_blank" href="__APP__/User/index/id/{$vo.Groups.user_id}">{$vo.name}</a>给<a target="_blank" href="__APP__/User/index/id/{$vo.User.iduser}">{$vo.User.name}</a>留言
+	                    </div>
+	                    <div class="list3_box_opera clearfix">
+	                        <span class="fl"><?php W('Howlongtime',$vo); ?></span>
+	                        <div class="fr">
+	                        	<a class="link0" target="_blank"  href="__APP__{$vo.a_action}{$vo.a_function}{$vo.a_get}{$vo.a_tictactoe}">查看</a>
+	                        </div>
+	                    </div>
+	                </div>
+                <?php } ?>
+                </volist>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="sidebar_nav">
+                <ul>
+                    <li><a class="this" href="__APP__/Admin/all_notice">全部提醒</a></li>
+                    <li><a href="__APP__/Admin/rp/type/pv">观点发表</a></li>
+                    <li><a href="__APP__/Admin/rp/type/rs">荐股发表</a></li>
+                    <li><a href="__APP__/Admin/groups">新建圈子</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

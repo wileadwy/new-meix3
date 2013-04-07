@@ -1,0 +1,111 @@
+<layout name='layout_api' />
+<div class="inside_main clearfix">
+    <div class="inside_content">
+        <textarea class="textarea js_get_value" name="reason">{$txt}</textarea>
+    </div>
+    <div class="inside_sidebar">
+        <textarea class="textarea js_valueDefault js_get_value" name="content">输入你的观点结论</textarea>
+        <div class="clearfix" style="margin-top: 10px;">
+            <select class="select fl js_get_value" name="or" style="width: 160px;">
+                <option value="more">看多</option>
+                <option value="empty">看空</option>
+            </select>
+            <input type="text" value="填写目标价" name="info_price" style="width: 148px;" class="input js_get_value fr js_valueDefault" />
+        </div>
+        <div class="clearfix" style="margin-top: 10px;">
+            <select class="select fl js_get_value" name="info_positions" style="width: 160px;">
+                <option value="">选择目标仓位</option>
+                <option value="10%">10%</option>
+                <option value="20%">20%</option>
+                <option value="30%">30%</option>
+                <option value="40%">40%</option>
+                <option value="50%">50%</option>
+                <option value="60%">60%</option>
+                <option value="70%">70%</option>
+                <option value="80%">80%</option>
+                <option value="90%">90%</option>
+                <option value="100%">100%</option>
+            </select>
+            <select class="select fr js_get_value" name="info_cycle" style="width: 160px;">
+                <option value="">选择影响周期</option>
+                <option value="1天">1天</option>
+                <option value="1周">1周</option>
+                <option value="1个月">1个月</option>
+                <option value="3个月">3个月</option>
+                <option value="6个月">6个月</option>
+                <option value="12个月">12个月</option>
+                <option value="长期">长期</option>
+            </select>
+        </div>
+        <div style="margin-top: 10px;" class="clearfix">
+            <input type="text" value="选择大市,行业或股票" style="width: 150px;" class="input js_valueDefault fl js_search" />
+            <div class="js_type inside_type"></div>
+        </div>
+        <div style="position: relative;" class="js_type_wrap"></div>
+    </div>
+</div>
+<div class="inside_button">
+    <a style=" color: #666; margin-right: 20px;" onclick="window.close();" href="javascript:;">取消</a><a class="btn1 js_viewpoint_submit" href="javascript:;">收集到美市</a>
+</div>
+<script type="text/javascript">
+var arr = ['输入你的观点结论','填写目标价','选择大市,行业或股票'];
+$.each($.getClass('js_valueDefault'),function(target){
+    $.inputDefault(target,arr[target.index]);
+});
+//匹配类型
+$.on($.getClass('js_search'),'keyup',function(){
+    var val = this.value;
+    if(val!=''){
+        $.ajax({
+            type : 'POST',
+            dataType : 'json',
+            url : Config_url + '/Api/search_a',
+            data : {'name':val},
+            success : function (data) {
+                if(data['status']==1){
+                    $.html($.getClass('js_type_wrap')[0],data['data']);
+                }
+            }
+        });
+    }else{
+        $.html($.getClass('js_type_wrap')[0],' ');
+    }
+});
+$.live($.getClass('js_search_select'),'click',function(){
+    $.html($.getClass('js_type')[0],'<span class="js_selected" data-type="'+$.attr(this,'data-type')+'" data-id="'+$.attr(this,'data-id')+'">'+$.html(this)+'</span>');
+    $.html($.getClass('js_type_wrap')[0],' ');
+});
+//提交方法
+$.on($.getClass('js_viewpoint_submit'),'click',function(){
+    var json = $.getValue('js_get_value');
+    json['d_table'] = 'stock';
+    json['d_id'] = '';
+    json['d_type'] = '';
+    if($.getClass('js_selected')[0]){
+        json['d_id'] = $.attr($.getClass('js_selected')[0],'data-id');
+        json['d_type'] = $.attr($.getClass('js_selected')[0],'data-type');
+    }
+    if(json['content']!=arr[0]&&json['reason']!=''&&json['d_id']!=''&&json['d_type']!=''){
+        $.ajax({
+            url : Config_url + '/Tool/moreorempty_a',
+            data : json,
+            success : function (data) {
+                if(data['status']=='1'){
+                    $.auto({
+                        content : data['info'],
+                        callback : function () {
+                            window.close();
+                        }
+                    })
+                }
+            }
+        })
+    }else if(json['content']==arr[0]){
+        $.alert({content:'观点结论不能为空!'});
+    }else if(json['reason']==''){
+        $.alert({content:'详细分析不能为空!'});
+    }else if(json['d_id']==''||json['d_type']==''){
+        $.alert({content:'发布栏目不能为空!'});
+    }
+});
+</script>

@@ -1,0 +1,62 @@
+		<div class="user_info_wrap clearfix">
+            <div class="clearfix p20">
+                <div class="user_avatar">
+                    <a href=""><img width="150" height="150" src="{$user.avatar}" /></a>
+                </div>
+                <div class="user_info">
+                    <div class="user_info_name">
+                        {$user.name}
+                    </div>
+                    <div class="user_info_text">
+                        <span>简介：</span>{$user.information}
+                    </div>
+                    <div class="user_info_tag clearfix">
+                        <span class="fl">投资风格：</span>
+                        <div class="fl" style="width: 380px;">
+                            <volist name="user.style" id="vo">
+        	                    <a>{$vo}</a>
+        	                </volist>
+                        </div>
+                    </div>
+                    <div class="user_info_table">
+                        <table>
+                            <tr>
+                                <td width="20%" align="center">
+                                    {$user.accuracy}%<br /><span>准确率</span>
+                                </td>
+                                <td width="20%" align="center">
+                                    {$user.accuracy_z}%<br /><span>账面收益率</span>
+                                </td>
+                                <td width="20%" align="center">
+                                    {$user.accuracy_v}%<br /><span>实际收益率</span>
+                                </td>
+                                <td width="20%" align="center">
+                                    {$user.point_view_count}<br /><span>观点</span>
+                                </td>
+                                <td width="20%" align="center" style="border: none;">
+                                    {$user.rec_stocks_count}<br /><span>荐股</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="user_opear clearfix">
+                <span class="fl">订阅宝：{$user_info_dingyuebao}</span>
+                <div class="fr">
+                    <?php if($_SESSION['MEIX']['iduser'] != $user['iduser']){ ?>
+              		    <?php if($user['subscribe'] == '0'){ ?>
+                   	        <a class="button0 fl js_subscribe" data-user-id="{$user.iduser}" href="javascript:;">订阅</a>
+                        <?php }else{ ?>
+                       	    <a class="button0 fl js_subscribe" data-user-id="{$user.iduser}" href="javascript:;">已订阅</a>
+                        <?php } ?>
+                        <?php if($user['attention'] == '0'){ ?>
+                       	    <a class="button0 fl js_attention_person" data-user-id="{$user.iduser}" href="javascript:;">关注</a>
+                        <?php }else{ ?>
+                       	    <a class="button0 fl js_attention_person" data-user-id="{$user.iduser}" href="javascript:;">取消关注</a>
+                        <?php } ?>
+                        <a class="icon_letter fl js_letter_add" data-user-name="{$user.name}" data-user-id="{$user.iduser}" href="javascript:;"></a>
+                    <?php } ?>
+                </div>
+            </div>
+       </div>

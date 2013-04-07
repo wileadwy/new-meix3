@@ -1,0 +1,26 @@
+            <div class="TL_title">{$list|count=###}个 热门讨论<a class="btn1 fr js_TL_add" href="javascript:;">发起讨论</a></div>
+                <div class="TL_list">
+                    <ul>
+                        <volist name="list" id="vo">
+                        <li>
+                            <div class="TL_list_content">{$vo.subject}</div>
+                            <div class="TL_list_fn">
+                                <a class="icon_x" href="__APP__/Discuss/index/id/{$vo.iddiscuss}">({$vo.info_message_count})</a>
+                                <span>
+                                <?php $cetime = mktime()-$vo['mktime'];
+                                        if($cetime<432000){
+                                            if($cetime<86400){
+                                                echo '今天';
+                                            }else{
+                                                echo ((int)($cetime/86400)).'天前';
+                                            }
+                                        }else{ ?>
+                                {$vo.mktime|date="Y-m-d H:i",###}
+                                <?php } ?>
+                                </span>
+                            </div>
+                        </li>
+                        </volist>
+
+                    </ul>
+                </div>

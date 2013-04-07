@@ -1,0 +1,206 @@
+<layout name='layout_index' />
+<div class="home">
+    <div class="content">
+        <div class="content_nav">
+            <ul class="clearfix">
+                <li class="content_nav_list2 first"><a href="__APP__">我的订阅</a></li>
+                <li class="content_nav_list2 last"><a class="this" href="">我的关注</a></li>
+            </ul>
+        </div>
+        <div class="pl10 pr10 clearfix">
+	    	<volist name="attention_user_list" id="vo">
+	        	<?php if(!empty($vo['User'])){ ?>
+	            <div class="content_user_list_box clearfix">
+		            <div class="content_user_list_img">
+			            <a href="__APP__/User/index/id/{$vo.User.iduser}">
+			            	<img width="60" height="60" src="{$vo.User.avatar}" />
+			            </a>
+		            </div>
+		            <div class="content_user_list_info">
+			            <div class="content_user_list_info_title">
+			            	<a href="/index.php/User/index/id/{$vo.User.iduser}">{$vo.User.name}</a>
+			            </div>
+			            <div class="content_user_list_info_other">{$vo.User.accuracy}%准确率<span>|</span>{$vo.User.attention_count}人关注</div>
+		            </div>
+	            </div>
+	            <?php }elseif(!empty($vo['Groups']['idgroups'])){ ?>
+	            <div class="content_group_list_box clearfix">
+		            <div class="gropu_list_img gropu_list_img<?php if(count($vo['Groups']['User'])<=4){echo '4';}else{echo '9';} ?>">
+		            	<a href="/index.php/Groups/discuess/gid/{$vo.Groups.idgroups}">
+		            		<ul class="clearfix">
+		            			<?php foreach($vo['Groups']['User'] as $key=>$val){ ?>
+			            			<?php if($key<= 8 ){ ?>
+			            				<li><img width="23" height="23" src="<?php echo $val['avatar']; ?>"></li>
+		            				<?php } ?>
+		            			<?php } ?>
+		            		</ul>
+		            	</a>
+		            </div>
+		            <div class="content_group_list_info">
+			            <div class="content_group_list_info_title">
+			            	<a href="/index.php/Groups/discuess/gid/{$vo.Groups.idgroups}">{$vo.Groups.name}</a>
+			            </div>
+			            <div class="content_group_list_info_other">{$vo.Groups.join_count}人参与</div>
+			            <div class="content_group_list_info_other">{$vo.Groups.accuracy}%准确率<span>|</span>{$vo.Groups.attention_count}人关注</div>
+		            </div>
+	            </div>
+				<?php } ?>
+			</volist>
+    	</div>
+    </div>
+    <div class="sidebar">
+        <div class="sidebar_button">
+            <a class="js_viewpoint" href="javascript:;">发布观点</a>
+            <a class="js_recommendedStock mt15" href="javascript:;">荐股</a>
+        </div>
+        <div class="sidebar_nav mt10">
+            <ul>
+                <li class="first"><a href="__APP__/User/groups/id/{$uid}">我的圈子</a></li>
+                <li><a href="__APP__/User/favorite/id/{$uid}">我的收藏</a></li>
+                <li><a href="__APP__/User/index/id/{$uid}">我发表的观点</a></li>
+                <li><a href="__APP__/User/recstock/id/{$uid}">我的荐股</a></li>
+                <li class="last"><a class="js_meix_invite" href="javascript:;">邀请朋友来美市</a></li>
+            </ul>
+        </div>
+        <div class="sidebar_box mt10">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">我的股票</span>
+                <a class="js_myStock fr" href="javascript:;">添加</a>
+            </div>
+            <div class="sidebar_box_content sidebar_stock_list">
+	            <volist name="mystocks" id="myvo">
+	                <div class="sidebar_stock_list_box">
+	                    <div class="p10 clearfix">
+                            <div class="tag fl"><a href="__APP__/Stocks/inside/sid/{$myvo.idstock}">{$myvo.showname}</a><a data-tag-id="{$myvo.idstock}" class="js_myStock_del" href="javascript:;">X</a></div>
+                        </div>
+	                    <div class="sidebar_stock_list_info">
+	                        <table>
+	                            <tr>
+	                                <td>{$myvo.now_price}</td>
+	                                <td><?php echo $myvo['now_price']-$myvo['begin_price']; ?></td>
+	                                <td><?php $p =  floor((($myvo['now_price']-$myvo['begin_price'])/($myvo['begin_price']))*10000)/10000*100; echo $p.'%'; ?></td>
+	                            </tr>
+	                        </table>
+	                    </div>
+	                </div>
+	            </volist>
+            </div>
+        </div>
+        <div class="sidebar_box mt10">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">常去的圈子</span>
+                <!--<a class="js_oftenGroup fr" href="javascript:;">添加</a>-->
+            </div>
+            <div class="sidebar_box_content sidebar_group_list">
+	            <volist name="usually_groups" id='vo'>
+	                <div class="sidebar_group_list_box clearfix">
+	                    <div class="sidebar_group_list_img img<?php if(count($vo['User'])<=4){ echo '4';}else{ echo '9';} ?>">
+	                        <a href="__APP__/Groups/discuess/gid/{$vo.idgroups}">
+	                            <ul class="clearfix">
+		                            <?php foreach($vo['User'] as $key=>$val){ if($key<9){ ?>
+		                                <li><img src="<?php echo $val['avatar']; ?>" width="23" height="23" /></li>
+		                            <?php }} ?>
+	                            </ul>
+	                        </a>
+	                    </div>
+	                    <div class="sidebar_group_list_info">
+	                        <div class="sidebar_group_list_info_title"><a href="__APP__/Groups/discuess/gid/{$vo.idgroups}">{$vo.name}</a></div>
+	                        <div class="sidebar_group_list_info_other">{$vo.join}人参与</div>
+	                        <div class="sidebar_group_list_info_other">{$vo.rate}准确率<span>|</span>{$vo.attention}人关注</div>
+	                    </div>
+	                </div>
+	            </volist>
+            </div>
+        </div>
+        <div class="sidebar_box mt10">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">你可能感兴趣的圈子</span>
+                <a class="js_group_change fr" href="javascript:;">换一换</a>
+            </div>
+            <div class="sidebar_box_content sidebar_group_list js_change_group_list">
+	            <volist name="love_groups" id="vo">
+	                <div class="sidebar_group_list_box clearfix">
+	                    <div class="sidebar_group_list_img img<?php if(count($vo['User'])<=4){ echo '4';}else{ echo '9';} ?>">
+	                        <a href="__APP__/Groups/discuess/gid/{$vo.idgroups}">
+	                            <ul class="clearfix">
+		                            <?php foreach($vo['User'] as $key=>$val){ ?>
+		                            	<?php if($key<= 8 ){ ?>
+		                                	<li><img src="<?php echo $val['avatar']; ?>" width="23" height="23" /></li>
+		                                <?php } ?>
+		                            <?php } ?>
+	                            </ul>
+	                        </a>
+	                    </div>
+	                    <div class="sidebar_group_list_info">
+	                        <div class="sidebar_group_list_info_title"><a href="__APP__/Groups/discuess/gid/{$vo.idgroups}">{$vo.name}</a></div>
+	                        <div class="sidebar_group_list_info_other">{$vo.join}人参与</div>
+	                        <div class="sidebar_group_list_info_other">{$vo.rate}准确率<span>|</span>{$vo.attention}人关注</div>
+	                    </div>
+	                </div>
+                </volist>
+            </div>
+        </div>
+        <div class="sidebar_box mt10">
+            <div class="sidebar_box_title clearfix">
+                <span class="fl">你可能感兴趣的人</span>
+                <a class="js_user_change fr" href="javascript:;">换一换</a>
+            </div>
+            <div class="sidebar_box_content sidebar_user_list js_change_user_list">
+	            <volist name="love_person" id="vo">
+	                <div class="sidebar_user_list_box clearfix">
+	                    <div class="sidebar_user_list_img">
+	                        <a href="__APP__/User/index/id/{$vo.iduser}"><img src="{$vo.avatar}" width="54" height="54" /></a>
+	                    </div>
+	                    <div class="sidebar_user_list_info">
+	                        <div class="sidebar_user_list_info_title"><a href="__APP__/User/index/id/{$vo.iduser}">{$vo.name}</a></div>
+	                        <div class="sidebar_user_list_info_other">{$vo.rate}准确率<span>|</span>{$vo.attention}人关注</div>
+	                    </div>
+	                </div>
+	            </volist>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$.on($.getClass('js_viewpoint'),'click',function(){
+    Common.layout('发布观点','/Theme/viewpointadd',{});
+});
+$.on($.getClass('js_recommendedStock'),'click',function(){
+    Common.layout('发布荐股','/Theme/recstockadd',{});
+});
+$.on($.getClass('js_myStock'),'click',function(){
+    Common.layout('添加我的股票','/Theme/index',{'theme':'myStock_add'});
+});
+$.on($.getClass('js_oftenGroup'),'click',function(){
+    Common.layout('添加常去的圈子','/Theme/index',{'theme':'oftenGroup_add'});
+});
+$.on($.getClass('js_myStock_del'),'click',function(){
+    $.ajax({
+        url : Config['defaultUrl'] + '/Home/my_stock_del',
+        data : {'stocks':$.attr(this,'data-tag-id')},
+        context : this,
+        success : function (data) {
+            if(data['status']==1){
+                $.remove($.parents(this.context,'sidebar_stock_list_box'));
+            }
+        }
+    });
+});
+$.on($.getClass('js_meix_invite'),'click',function(){
+    $.ajax({
+        url : Config['defaultUrl'] + '/Home/user_invite',
+        success : function (data) {
+            if(data['status']==1){
+                Common.mask({
+                    back : '获得邀请码',
+                    operate : '<a class="link0 js_mask_close" href="javascript:;">取消</a><a class="button0 js_mask_close" href="javascript:;">确定</a>',
+                    content : '<div class="p20"><input type="text" value="'+data['data']+'" class="form_input w400" /></div>'
+                });
+            }
+        }
+    });
+});
+Common.change.user({'type':'home','num':'3'}); //换感兴趣的人
+Common.change.group({'type':'home','num':'3'}); //换感兴趣的圈子
+Common.tagSearch({action:'/Index/index'}); //搜索
+</script>

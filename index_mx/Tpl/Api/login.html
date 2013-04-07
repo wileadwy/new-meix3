@@ -1,0 +1,58 @@
+<layout name='layout_api' />
+<div class="content"><img src="__ANNEX__/images/login_banner.jpg" width="630" height="300" /></div>
+<div class="sidebar">
+    <table>
+        <tr>
+            <td><input class="input js_get_value" placeholder="MeiX帐号" type="text" value="" name="username" /></td>
+        </tr>
+        <tr>
+            <td><input class="input js_get_value" placeholder="密码" type="password" value="" name="password" /></td>
+        </tr>
+        <tr>
+            <td>
+                <a class="fr button js_login_submit" href="javascript:;">登录</a>
+            </td>
+        </tr>
+        <tr>
+            <td height="30"></td>
+        </tr>
+        <tr>
+            <td><a class="icon_sina" href="{$sinaurl}">新浪微博</a></td>
+        </tr>
+        <tr>
+            <td><a class="icon_qq" href="__APP__/Login/qqlogin">腾讯微博</a></td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+var submit = function () {
+    var json = $.getValue('js_get_value');
+    if($.isEmail(json['username'])&&json['password']!=''){
+        $.loading({content:'登陆中...'});
+        $.ajax({
+            type : 'POST',
+            url : Config_url + '/Login/login_a',
+            dataType : 'json',
+            data : json,
+            success : function (data) {
+                $.promptClose();
+                $.auto({
+                    content : data['info'],
+                    callback : function () {
+                        if(data['status']=='1'){
+                            window.location.reload();
+                        }
+                        $.promptClose();
+                    }
+                });
+            }
+        })
+    }else if(!$.isEmail(json['username'])){
+        $.alert({content:'邮箱格式不正确!'});
+    }else if(json['password']==''){
+        $.alert({content:'密码不能为空!'});
+    }
+}
+$.isEnter($.getClass('js_get_value')[$.getClass('js_get_value').length-1],submit);
+$.on($.getClass('js_login_submit'),'click',submit);
+</script>

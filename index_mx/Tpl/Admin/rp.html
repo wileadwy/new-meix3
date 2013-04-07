@@ -1,0 +1,45 @@
+<layout name='layout_index' />
+<div class="user_notice_wrap">
+    <div class="user_notice_title">荐股观点发表</div>
+    <div class="user_notice clearfix">
+        <div class="content">
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>发布人</td>
+                            <td>类型</td>
+                            <td>操作</td>
+                            <td>创建时间</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="list" id="vo">
+                        <tr>
+                            <td><a href="__APP__/index.php/User/index/id/{$vo.user_id}" target="_blank">{$vo.user_name}</a></td>
+                            <?php if($type == 'pv'){ ?>
+                            <td>观点</td>
+                            <td><a target="_blank" href="__APP__/Pointview/inside/pid/{$vo.idpoint_view}">查看</a></td>
+                            <?php }elseif($type == 'rs'){ ?>
+                            <td>荐股</td>
+                            <td><a target="_blank" href="__APP__/Recstocks/inside/rid/{$vo.idrec_stocks}">查看</a></td>
+                            <?php } ?>
+                            <td><?php echo date('Y-m-d h:i',$vo['mktime']); ?></td>
+                        </tr>
+                        </volist>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="sidebar_nav">
+                <ul>
+                    <li><a href="__APP__/Admin/all_notice">全部提醒</a></li>
+                    <li><a <?php if($type=='pv'){echo "class='this'"; } ?> href="__APP__/Admin/rp/type/pv">观点发表</a></li>
+                    <li><a <?php if($type=='rs'){echo "class='this'"; } ?>  href="__APP__/Admin/rp/type/rs">荐股发表</a></li>
+                    <li><a href="__APP__/Admin/groups">新建圈子</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
